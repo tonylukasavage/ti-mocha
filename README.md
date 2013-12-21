@@ -6,6 +6,8 @@ Simple and reliable support for [mocha](https://github.com/visionmedia/mocha) te
 
 Essentially, it takes mocha's existing browser-compatible build, makes a few Titanium-specific modifications, adds a Titanium compatible reporter, and it's good to go. The goal is to make the modifications to mocha as minimal as possible in order to make maintaining ti-mocha's stability and version parity very easy.
 
+Check out [mocha's documentation](http://visionmedia.github.io/mocha/) for more details.
+
 ## Installation
 
 1. Download [ti-mocha.js](downloads).
@@ -13,13 +15,7 @@ Essentially, it takes mocha's existing browser-compatible build, makes a few Tit
 
 ## Usage
 
-```javascript
-require('ti-mocha');
-
-describe('ti-mocha', function() {
-	it('works!');
-});
-```
+[Examples](examples)
 
 ## Development
 
@@ -33,7 +29,7 @@ describe('ti-mocha', function() {
 grunt build
 ```
 
-This process will generate a new `ti-mocha.js` file based on the `mocha.js` file in the `ti-mocha` folder. It will also create a minified `ti-mocha.min.js` file.
+This process will generate a new `ti-mocha.js` file based on the `src/mocha.js` file in the `ti-mocha` folder. It will also create a minified `ti-mocha.min.js` file.
 
 #### Testing
 

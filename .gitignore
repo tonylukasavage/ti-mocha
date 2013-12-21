@@ -17,3 +17,5 @@ node_modules
 .DS_Store
 coverage
 build
+examples/alloy/ti-mocha-alloy
+examples/traditional/ti-mocha-traditional
