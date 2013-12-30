@@ -10,12 +10,49 @@ Check out [mocha's documentation](http://visionmedia.github.io/mocha/) for more 
 
 ## Installation
 
-1. Download [ti-mocha.js](downloads).
+1. Download [ti-mocha.js](ti-mocha.js) or the [minified version](ti-mocha.min.js).
 2. Copy `ti-mocha.js` into your project's `Resources` folder.
 
-## Usage
+## Example
 
-[Examples](examples)
+```javascript
+// require ti-mocha
+require('ti-mocha');
+
+// setup the UI and the reporter
+mocha.setup({
+	ui: 'bdd',
+	reporter: 'ti-spec'
+});
+
+// create the test suite
+describe('ti-mocha', function() {
+
+	describe('suite 1', function() {
+
+		it('shows passing tests (fast)', function(){});
+
+		it('shows passing tests (slow)', function(done){
+			setTimeout(done, 1500);
+		});
+
+	});
+
+	describe('suite 2', function() {
+
+		it('shows pending tests');
+
+		it('fails a test', function() {
+			throw new Error('this shoud fail');
+		});
+
+	});
+
+});
+
+// run the tests
+mocha.run();
+```
 
 ## Development
 
@@ -29,7 +66,7 @@ Check out [mocha's documentation](http://visionmedia.github.io/mocha/) for more 
 grunt build
 ```
 
-This process will generate a new `ti-mocha.js` file based on the files in `src`. It will also create a minified `ti-mocha.min.js` file.
+This process will generate a new `ti-mocha.js` file based on the files in `src`. It will also create a minified `ti-mocha.min.js` file. See [lib/build.js](lib/build.js) for details of the simple build process.
 
 #### Testing
 
