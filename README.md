@@ -1,4 +1,4 @@
-# ti-mocha [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+# ti-mocha [![Build Status](https://travis-ci.org/tonylukasavage/ti-mocha.png?branch=master)](https://travis-ci.org/tonylukasavage/ti-mocha) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
 > \>\>\> _NOT YET FUNCTIONAL_ <<<
 
