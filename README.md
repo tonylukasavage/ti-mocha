@@ -77,3 +77,9 @@ grunt test
 ## Contributing
 
 If something breaks, particularly if you encounter issues on specific mobile platforms, or if you have a way to make this better, please log an [issue](https://github.com/tonylukasavage/ti-mocha/issues). Bear in mind that this is a straight-up, minimal porting effort to make mocha work with Titanium. If you want additional features or functionality in mocha itself, please report them in the [mocha](https://github.com/visionmedia/mocha) repository.
+
+## TODO
+
+* Only tested in iOS simulator on Mac OSX so far. The code should be platform-agnostic, but it would be good to get some testing done on other mobile and host OSes.
+* More robust testing for build script, should at least verify the validity of the resulting ti-mocha.js file.
+* [should.js](https://github.com/visionmedia/should.js/) support
