@@ -10,7 +10,7 @@ Check out [mocha's documentation](http://visionmedia.github.io/mocha/) for more 
 
 ## Installation
 
-1. Download [ti-mocha.js](ti-mocha.js) or the [minified version](ti-mocha.min.js).
+1. Download [ti-mocha.js](https://raw.github.com/tonylukasavage/ti-mocha/master/ti-mocha.js) or the [minified version](https://raw.github.com/tonylukasavage/ti-mocha/master/ti-mocha.min.js).
 2. Copy `ti-mocha.js` into your project's `Resources` folder.
 
 ## Example
