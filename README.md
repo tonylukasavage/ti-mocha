@@ -1,10 +1,10 @@
 # ti-mocha
 
-> _NOT YET FUNCTIONAL_
+> >>> _NOT YET FUNCTIONAL_ <<<
 
 Simple and reliable support for [mocha](https://github.com/visionmedia/mocha) testing with Appcelerator's [Titanium](http://www.appcelerator.com/titanium/) SDK.
 
-Essentially, it takes mocha's existing browser-compatible build, makes a few Titanium-specific modifications, adds a Titanium compatible reporter, and it's good to go. The goal is to make the modifications to mocha as minimal as possible in order to make maintaining ti-mocha's stability and version parity very easy.
+ti-mocha takes mocha's existing browser-compatible build, makes a few Titanium-specific modifications, adds a Titanium compatible reporter, and it's good to go. The goal is to make the modifications to mocha as minimal as possible in order to make maintaining ti-mocha's stability and version parity very easy.
 
 Check out [mocha's documentation](http://visionmedia.github.io/mocha/) for more details.
 
@@ -29,7 +29,7 @@ Check out [mocha's documentation](http://visionmedia.github.io/mocha/) for more 
 grunt build
 ```
 
-This process will generate a new `ti-mocha.js` file based on the `src/mocha.js` file in the `ti-mocha` folder. It will also create a minified `ti-mocha.min.js` file.
+This process will generate a new `ti-mocha.js` file based on the files in `src`. It will also create a minified `ti-mocha.min.js` file.
 
 #### Testing
 
