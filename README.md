@@ -8,7 +8,7 @@ Check out [mocha's documentation](http://visionmedia.github.io/mocha/) for more 
 
 ## Installation
 
-1. Download [ti-mocha.js](https://raw.github.com/tonylukasavage/ti-mocha/master/ti-mocha.js) or the [minified version](https://raw.github.com/tonylukasavage/ti-mocha/master/ti-mocha.min.js).
+1. Download [ti-mocha.js](https://raw.github.com/tonylukasavage/ti-mocha/master/ti-mocha.js).
 2. Copy `ti-mocha.js` into your project's `Resources` folder.
 
 ## Example
@@ -64,7 +64,7 @@ mocha.run();
 grunt build
 ```
 
-This process will generate a new `ti-mocha.js` file based on the files in `src`. It will also create a minified `ti-mocha.min.js` file. See [lib/build.js](lib/build.js) for details of the simple build process.
+This process will generate a new `ti-mocha.js` file based on the files in `src`. See [lib/build.js](lib/build.js) for details of the simple build process.
 
 #### Testing
 
@@ -83,3 +83,4 @@ Bear in mind that this is a straight-up, minimal porting effort to make mocha wo
 * Only tested in iOS simulator on Mac OSX so far. The code should be platform-agnostic, but it would be good to get some testing done on other mobile and host OSes.
 * More robust testing for build script, should at least verify the validity of the resulting ti-mocha.js file.
 * [should.js](https://github.com/visionmedia/should.js/) support
+

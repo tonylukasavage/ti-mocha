@@ -55,13 +55,6 @@ module.exports = function(grunt) {
     },
     clean: {
       src: ['build']
-    },
-    uglify: {
-      'ti-mocha': {
-        files: {
-          'ti-mocha.min.js': ['ti-mocha.js']
-        }
-      }
     }
   });
 
@@ -69,7 +62,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
 
   // run build
   grunt.registerTask('_build', 'finalize ti-mocha.js release file', function() {
@@ -87,7 +79,7 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['mochaTest', 'clean']);
 
   // release
-  grunt.registerTask('build', ['jshint', 'mochaTest', '_build', 'uglify:ti-mocha', 'clean']);
+  grunt.registerTask('build', ['jshint', 'mochaTest', '_build', 'clean']);
 
   // Register tasks
   grunt.registerTask('default', ['jshint', 'test']);
