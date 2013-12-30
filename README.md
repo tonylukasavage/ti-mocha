@@ -1,6 +1,6 @@
 # ti-mocha
 
-> >>> _NOT YET FUNCTIONAL_ <<<
+> \>\>\> _NOT YET FUNCTIONAL_ <<<
 
 Simple and reliable support for [mocha](https://github.com/visionmedia/mocha) testing with Appcelerator's [Titanium](http://www.appcelerator.com/titanium/) SDK.
 
