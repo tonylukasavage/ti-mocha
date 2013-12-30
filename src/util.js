@@ -1,3 +1,6 @@
+
+require.register("titanium/util.js", function(module, exports, require){
+
 function objectToString(o) {
   return Object.prototype.toString.call(o);
 }
@@ -361,3 +364,5 @@ function formatPrimitive(ctx, value) {
   if (isNull(value))
     return ctx.stylize('null', 'null');
 }
+
+});
