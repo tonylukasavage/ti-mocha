@@ -10,19 +10,12 @@ Check out [mocha's documentation](http://visionmedia.github.io/mocha/) for more 
 
 1. Download [ti-mocha.js](https://raw.github.com/tonylukasavage/ti-mocha/master/ti-mocha.js).
 2. Copy `ti-mocha.js` into your project's `Resources` folder.
-3. `require('ti-mocha')` in your app.js to make `mocha` available globally.
 
 ## Example
 
 ```javascript
-// require ti-mocha
+// creates the "mocha" global necessary to run a test suite anywhere in your app
 require('ti-mocha');
-
-// setup the UI and the reporter
-mocha.setup({
-	ui: 'bdd',
-	reporter: 'ti-spec'
-});
 
 // create the test suite
 describe('ti-mocha', function() {
@@ -81,5 +74,7 @@ Bear in mind that this is a straight-up, minimal porting effort to make mocha wo
 
 ## TODO
 
-* Only tested in iOS simulator on Mac OSX so far. The code should be platform-agnostic, but it would be good to get some testing done on other mobile and host OSes.
+* Only tested in iOS/Android simulator on Mac OSX so far. The code should be platform-agnostic, but it would be good to get some testing done on other mobile and host OSes.
 * More robust testing for build script, should at least verify the validity of the resulting ti-mocha.js file.
+* Testing in Studio. All testing done on CLI so far.
+
