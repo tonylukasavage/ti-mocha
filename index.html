@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>ti-mocha by tonylukasavage</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>ti-mocha</h1>
+          <h2>Simple and reliable support for mocha testing with Appcelerator's Titanium SDK</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/tonylukasavage/ti-mocha/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/tonylukasavage/ti-mocha/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/tonylukasavage/ti-mocha" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a name="ti-mocha--" class="anchor" href="#ti-mocha--"><span class="octicon octicon-link"></span></a>ti-mocha <a href="https://travis-ci.org/tonylukasavage/ti-mocha"><img src="https://travis-ci.org/tonylukasavage/ti-mocha.png?branch=master" alt="Build Status"></a> <a href="http://gruntjs.com/"><img src="https://cdn.gruntjs.com/builtwith.png" alt="Built with Grunt"></a>
+</h1>
+
+<p>Simple and reliable support for <a href="https://github.com/visionmedia/mocha">mocha</a> testing with Appcelerator's <a href="http://www.appcelerator.com/titanium/">Titanium</a> SDK.</p>
+
+<p>ti-mocha takes mocha's existing browser-compatible build, makes a few Titanium-specific modifications, adds a Titanium compatible reporter, and it's good to go. The goal is to make the modifications to mocha as minimal as possible in order to make maintaining ti-mocha's stability and version parity very easy. It also works well with the browser-compatible version of the <a href="https://github.com/visionmedia/should.js">should.js</a> assertion library.</p>
+
+<p>Check out <a href="http://visionmedia.github.io/mocha/">mocha's documentation</a> for more details.</p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<ol>
+<li>Download <a href="https://raw.github.com/tonylukasavage/ti-mocha/master/ti-mocha.js">ti-mocha.js</a>.</li>
+<li>Copy <code>ti-mocha.js</code> into your project's <code>Resources</code> folder.</li>
+</ol><h2>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h2>
+
+<div class="highlight highlight-javascript"><pre><span class="c1">// creates the "mocha" global necessary to run a test suite anywhere in your app</span>
+<span class="nx">require</span><span class="p">(</span><span class="s1">'ti-mocha'</span><span class="p">);</span>
+
+<span class="c1">// create the test suite</span>
+<span class="nx">describe</span><span class="p">(</span><span class="s1">'ti-mocha'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="nx">describe</span><span class="p">(</span><span class="s1">'suite 1'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+        <span class="nx">it</span><span class="p">(</span><span class="s1">'shows passing tests (fast)'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){});</span>
+
+        <span class="nx">it</span><span class="p">(</span><span class="s1">'shows passing tests (slow)'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">done</span><span class="p">){</span>
+            <span class="nx">setTimeout</span><span class="p">(</span><span class="nx">done</span><span class="p">,</span> <span class="mi">1500</span><span class="p">);</span>
+        <span class="p">});</span>
+
+    <span class="p">});</span>
+
+    <span class="nx">describe</span><span class="p">(</span><span class="s1">'suite 2'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+        <span class="nx">it</span><span class="p">(</span><span class="s1">'shows pending tests'</span><span class="p">);</span>
+
+        <span class="nx">it</span><span class="p">(</span><span class="s1">'fails a test'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">'this shoud fail'</span><span class="p">);</span>
+        <span class="p">});</span>
+
+    <span class="p">});</span>
+
+<span class="p">});</span>
+
+<span class="c1">// run the tests</span>
+<span class="nx">mocha</span><span class="p">.</span><span class="nx">run</span><span class="p">();</span>
+</pre></div>
+
+<h2>
+<a name="development" class="anchor" href="#development"><span class="octicon octicon-link"></span></a>Development</h2>
+
+<ol>
+<li>Install <a href="">node.js</a>.</li>
+<li>Install <a href="">grunt</a>: <code>sudo npm install -g grunt-cli</code>
+</li>
+<li><code>cd ti-mocha &amp;&amp; npm install</code></li>
+</ol><h4>
+<a name="build" class="anchor" href="#build"><span class="octicon octicon-link"></span></a>Build</h4>
+
+<pre><code>grunt build
+</code></pre>
+
+<p>This process will generate a new <code>ti-mocha.js</code> file based on the files in <code>src</code>. See <a href="lib/build.js">lib/build.js</a> for details of the simple build process.</p>
+
+<h4>
+<a name="testing" class="anchor" href="#testing"><span class="octicon octicon-link"></span></a>Testing</h4>
+
+<pre><code>grunt test
+</code></pre>
+
+<h2>
+<a name="issues-and-contributing" class="anchor" href="#issues-and-contributing"><span class="octicon octicon-link"></span></a>Issues and Contributing</h2>
+
+<p>Distributed under <a href="LICENSE">MIT License</a>. Please report issues, new features/reporters, or requests in this repo's <a href="https://github.com/tonylukasavage/ti-mocha/issues">issue tracker</a>.</p>
+
+<p>Bear in mind that this is a straight-up, minimal porting effort to make mocha work with Titanium. If you want additional features or functionality in mocha itself, please report them in the <a href="https://github.com/visionmedia/mocha">mocha</a> repository.</p>
+
+<h2>
+<a name="todo" class="anchor" href="#todo"><span class="octicon octicon-link"></span></a>TODO</h2>
+
+<ul>
+<li>Only tested in iOS/Android simulator on Mac OSX so far. The code should be platform-agnostic, but it would be good to get some testing done on other mobile and host OSes.</li>
+<li>More robust testing for build script, should at least verify the validity of the resulting ti-mocha.js file.</li>
+<li>Testing in Studio. All testing done on CLI so far.</li>
+<li>Improvements to ti-spec output and/or an in-app reporter.</li>
+</ul>
+        </section>
+
+        <footer>
+          ti-mocha is maintained by <a href="https://github.com/tonylukasavage">tonylukasavage</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
