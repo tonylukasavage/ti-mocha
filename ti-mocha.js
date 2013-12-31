@@ -6228,8 +6228,23 @@ TiSpec.prototype.constructor = TiSpec;
 // stub location that mocha uses
 global.location = {};
 
-// Override the console functions with node.js-style formatting. This allows us to make use of some of mocha's
-// builtin reporters with little to no modification.
+// set the ti-spec reporter by default
+mocha.setup({
+	ui: 'bdd',
+	reporter: 'ti-spec'
+});
+
+// reset the suites each time mocha is run
+var _mochaRun = mocha.run;
+mocha.run = function(fn) {
+	_mochaRun(function() {
+		mocha.suite.suites.length = 0;
+		if (fn) { fn(); }
+	});
+};
+
+// Override the console functions with node.js-style formatting. This allows us to use some of mocha's existing
+// reporters with only a few modifications, like I do with spec.
 var console = {};
 var types = ['info','log','error','warn','trace'];
 var LINE_RESET = '\u001b[2K' + '\u001b[0G';

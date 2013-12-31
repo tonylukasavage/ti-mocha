@@ -2,7 +2,7 @@
 
 Simple and reliable support for [mocha](https://github.com/visionmedia/mocha) testing with Appcelerator's [Titanium](http://www.appcelerator.com/titanium/) SDK.
 
-ti-mocha takes mocha's existing browser-compatible build, makes a few Titanium-specific modifications, adds a Titanium compatible reporter, and it's good to go. The goal is to make the modifications to mocha as minimal as possible in order to make maintaining ti-mocha's stability and version parity very easy.
+ti-mocha takes mocha's existing browser-compatible build, makes a few Titanium-specific modifications, adds a Titanium compatible reporter, and it's good to go. The goal is to make the modifications to mocha as minimal as possible in order to make maintaining ti-mocha's stability and version parity very easy. It also works well with the browser-compatible version of the [should.js](https://github.com/visionmedia/should.js) assertion library.
 
 Check out [mocha's documentation](http://visionmedia.github.io/mocha/) for more details.
 
@@ -10,6 +10,7 @@ Check out [mocha's documentation](http://visionmedia.github.io/mocha/) for more 
 
 1. Download [ti-mocha.js](https://raw.github.com/tonylukasavage/ti-mocha/master/ti-mocha.js).
 2. Copy `ti-mocha.js` into your project's `Resources` folder.
+3. `require('ti-mocha')` in your app.js to make `mocha` available globally.
 
 ## Example
 
@@ -82,5 +83,3 @@ Bear in mind that this is a straight-up, minimal porting effort to make mocha wo
 
 * Only tested in iOS simulator on Mac OSX so far. The code should be platform-agnostic, but it would be good to get some testing done on other mobile and host OSes.
 * More robust testing for build script, should at least verify the validity of the resulting ti-mocha.js file.
-* [should.js](https://github.com/visionmedia/should.js/) support
-
