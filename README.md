@@ -1,8 +1,6 @@
 # ti-mocha [![Build Status](https://travis-ci.org/tonylukasavage/ti-mocha.png?branch=master)](https://travis-ci.org/tonylukasavage/ti-mocha) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
-Simple and reliable support for [mocha](https://github.com/visionmedia/mocha) testing with Appcelerator's [Titanium](http://www.appcelerator.com/titanium/) SDK.
-
-Check below for a quick start. For full details, read the [documentation](http://tonylukasavage.com/ti-mocha/).
+Simple and reliable support for [mocha](https://github.com/visionmedia/mocha) testing with Appcelerator's [Titanium](http://www.appcelerator.com/titanium/) SDK. Check below for a quick start. For full details, read the [documentation](http://tonylukasavage.com/ti-mocha/).
 
 ## Installation
 
