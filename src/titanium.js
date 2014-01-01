@@ -132,9 +132,9 @@ mocha.run = function(fn) {
 var console = {};
 var types = ['info','log','error','warn','trace'];
 var LINE_RESET = '\u001b[2K' + '\u001b[0G';
-for (var i = 0; i < types.length; i++) {
-  var type = types[i];
-  console[type] = function() {
+
+function createConsoleLogger(type) {
+	console[type] = function() {
 
   	var args = Array.prototype.slice.call(arguments, 0);
   	if (args.length === 0) {
@@ -147,4 +147,8 @@ for (var i = 0; i < types.length; i++) {
   	// Use the util.js format() port to get node.js-like console functions
     Ti.API.log(type === 'log' ? 'info' : type, require('titanium/util').format.apply(this, args));
   };
+}
+
+for (var i = 0; i < types.length; i++) {
+	createConsoleLogger(types[i]);
 }
