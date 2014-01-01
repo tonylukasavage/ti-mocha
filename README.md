@@ -2,9 +2,7 @@
 
 Simple and reliable support for [mocha](https://github.com/visionmedia/mocha) testing with Appcelerator's [Titanium](http://www.appcelerator.com/titanium/) SDK.
 
-ti-mocha takes mocha's existing browser-compatible build, makes a few Titanium-specific modifications, adds a Titanium compatible reporter, and it's good to go. The goal is to make the modifications to mocha as minimal as possible in order to make maintaining ti-mocha's stability and version parity very easy. It also works well with the browser-compatible version of the [should.js](https://github.com/visionmedia/should.js) assertion library.
-
-Check out [mocha's documentation](http://visionmedia.github.io/mocha/) for more details.
+Check below for a quick start. For full details, read the [documentation](http://tonylukasavage.com/ti-mocha/).
 
 ## Installation
 
@@ -22,9 +20,9 @@ describe('ti-mocha', function() {
 
 	describe('suite 1', function() {
 
-		it('shows passing tests (fast)', function(){});
+		it('shows passing tests with fast result', function(){});
 
-		it('shows passing tests (slow)', function(done){
+		it('shows passing asynchronous tests with slow result', function(done){
 			setTimeout(done, 1500);
 		});
 
@@ -58,7 +56,7 @@ mocha.run();
 grunt build
 ```
 
-This process will generate a new `ti-mocha.js` file based on the files in `src`. See [lib/build.js](lib/build.js) for details of the simple build process.
+This process will generate a new `ti-mocha.js` file based on the files in `src`. See [lib/build.js](lib/build.js) for details of the simple build process. Please note that _no_ modifications are made in the [src/mocha.js](src/mocha.js) file in order to make the port as simple to maintain as possible. All work is done in the other files in the `src` folder, particularly [src/titanium.js](src/titanium.js).
 
 #### Testing
 
@@ -68,9 +66,7 @@ grunt test
 
 ## Issues and Contributing
 
-Distributed under [MIT License](LICENSE). Please report issues, new features/reporters, or requests in this repo's [issue tracker](https://github.com/tonylukasavage/ti-mocha/issues).
-
-Bear in mind that this is a straight-up, minimal porting effort to make mocha work with Titanium. If you want additional features or functionality in mocha itself, please report them in the [mocha](https://github.com/visionmedia/mocha) repository.
+Please report issues, new features/reporters, or requests in this repo's [issue tracker](https://github.com/tonylukasavage/ti-mocha/issues). Bear in mind that this is a straight-up, minimal porting effort to make mocha work with Titanium. If you want additional features or functionality in mocha itself, please report them in the [mocha](https://github.com/visionmedia/mocha) repository.
 
 ## TODO
 
@@ -79,3 +75,6 @@ Bear in mind that this is a straight-up, minimal porting effort to make mocha wo
 * Testing in Studio. All testing done on CLI so far.
 * Improvements to ti-spec output and/or an in-app reporter.
 
+## License
+
+Distributed under [MIT License](LICENSE).
