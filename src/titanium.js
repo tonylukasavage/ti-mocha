@@ -136,15 +136,15 @@ var LINE_RESET = '\u001b[2K' + '\u001b[0G';
 function createConsoleLogger(type) {
 	console[type] = function() {
 
-  	var args = Array.prototype.slice.call(arguments, 0);
-  	if (args.length === 0) {
-  		args.push(LINE_RESET);
-  	} else {
-  		// Clear the existing line of text using ANSI codes, get rid of those pesky [INFO] prefixes
-  		args[0] = LINE_RESET + args[0].toString().split(/(?:\r\n|\n|\r)/).join('\n' + LINE_RESET);
-  	}
+	var args = Array.prototype.slice.call(arguments, 0);
+	if (args.length === 0) {
+		args.push(LINE_RESET);
+	} else {
+		// Clear the existing line of text using ANSI codes, get rid of those pesky [INFO] prefixes
+		args[0] = LINE_RESET + args[0].toString().split(/(?:\r\n|\n|\r)/).join('\n' + LINE_RESET);
+	}
 
-  	// Use the util.js format() port to get node.js-like console functions
+	// Use the util.js format() port to get node.js-like console functions
     Ti.API.log(type === 'log' ? 'info' : type, require('titanium/util').format.apply(this, args));
   };
 }
