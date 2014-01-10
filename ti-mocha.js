@@ -6144,6 +6144,9 @@ function formatPrimitive(ctx, value) {
  *
  */
 
+var LINE_RESET = '\u001b[2K' + '\u001b[0G';
+var EMPTY_LINE = '\u001b[0m';
+
 // Create a titanium compatible reporter based on spec
 require.register("reporters/ti-spec.js", function(module, exports, require){
 
@@ -6176,11 +6179,11 @@ function TiSpec(runner) {
 		n = 0;
 
 	function CR() {
-		return '\u001b[2K' + '\u001b[0G';
+		return LINE_RESET;
 	}
 
 	function NL() {
-		log(color('pass', ''));
+		log(EMPTY_LINE);
 	}
 
 	function upOne() {
@@ -6249,16 +6252,10 @@ TiSpec.prototype.constructor = TiSpec;
 // stub location that mocha uses
 global.location = {};
 
-// set the ti-spec reporter by default
-mocha.setup({
-	ui: 'bdd',
-	reporter: 'ti-spec'
-});
-
 // reset the suites each time mocha is run
 var _mochaRun = mocha.run;
 mocha.run = function(fn) {
-	_mochaRun(function() {
+	_mochaRun.call(this, function() {
 		mocha.suite.suites.length = 0;
 		if (fn) { fn(); }
 	});
@@ -6268,20 +6265,19 @@ mocha.run = function(fn) {
 // reporters with only a few modifications, like I do with spec.
 var console = {};
 var types = ['info','log','error','warn','trace'];
-var LINE_RESET = '\u001b[2K' + '\u001b[0G';
 
 function createConsoleLogger(type) {
 	console[type] = function() {
 
-	var args = Array.prototype.slice.call(arguments, 0);
-	if (args.length === 0) {
-		args.push(LINE_RESET);
-	} else {
-		// Clear the existing line of text using ANSI codes, get rid of those pesky [INFO] prefixes
-		args[0] = LINE_RESET + args[0].toString().split(/(?:\r\n|\n|\r)/).join('\n' + LINE_RESET);
-	}
+		var args = Array.prototype.slice.call(arguments, 0);
+		if (args.length === 0) {
+			args.push(LINE_RESET);
+		} else {
+			// Clear the existing line of text using ANSI codes, get rid of those pesky [INFO] prefixes
+			args[0] = LINE_RESET + (args[0] || '').toString().split(/(?:\r\n|\n|\r)/).join('\n' + LINE_RESET);
+		}
 
-	// Use the util.js format() port to get node.js-like console functions
+		// Use the util.js format() port to get node.js-like console functions
     Ti.API.log(type === 'log' ? 'info' : type, require('titanium/util').format.apply(this, args));
   };
 }
@@ -6289,4 +6285,10 @@ function createConsoleLogger(type) {
 for (var i = 0; i < types.length; i++) {
 	createConsoleLogger(types[i]);
 }
+
+// set the ti-spec reporter by default
+mocha.setup({
+	ui: 'bdd',
+	reporter: 'ti-spec'
+});
 })();
