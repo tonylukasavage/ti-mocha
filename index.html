@@ -18,26 +18,15 @@
       <div class="inner">
 
         <header>
-          <span style="float:right;"><img src="images/appc.png" style="height:64px; width:64px;"></img>
-            <img src="images/mocha.png" style="height:64px; width:64px;"></img></span>
-
           <h1>ti-mocha</h1>
-          <h2>Simple, reliable support for mocha testing with Appcelerator's Titanium SDK</h2>
-          by <a href="https://twitter.com/tonylukasavage">Tony Lukasavage</a>
-          <a href="https://github.com/tonylukasavage/ti-mocha" id="view-on-github" class="button" style="float:right;"><span>View on GitHub</span></a>
+          <h2>Simple and reliable support for mocha testing with Appcelerator&#39;s Titanium SDK</h2>
         </header>
 
-<!--
         <section id="downloads" class="clearfix">
-            <img src="images/appc.png" style="height:64x; width:64x;"></img>
-            <img src="images/mocha.png" style="height:64x; width:64x;"></img>
-
           <a href="https://github.com/tonylukasavage/ti-mocha/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
           <a href="https://github.com/tonylukasavage/ti-mocha/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
           <a href="https://github.com/tonylukasavage/ti-mocha" id="view-on-github" class="button"><span>View on GitHub</span></a>
-
         </section>
-    -->
 
         <hr>
 
@@ -58,7 +47,7 @@
 
 <ol>
 <li>Download <a href="https://raw.github.com/tonylukasavage/ti-mocha/master/ti-mocha.js">ti-mocha.js</a>.</li>
-<li>Copy <code>ti-mocha.js</code> into your project's <code>Resources</code> folder for traditional Titanium development, or into <code>app/lib</code> for Alloy projects.</li>
+<li>Copy <code>ti-mocha.js</code> into your project's <code>Resources</code> folder.</li>
 </ol><h2>
 <a name="basic-usage" class="anchor" href="#basic-usage"><span class="octicon octicon-link"></span></a>Basic Usage</h2>
 
@@ -101,7 +90,7 @@
 
 <ol>
 <li>Download <a href="https://raw.github.com/visionmedia/should.js/master/should.js">should.js</a>.</li>
-<li>Copy <code>should.js</code> into your project's <code>Resources</code> folder for traditional Titanium development, or into <code>app/lib</code> for Alloy projects.</li>
+<li>Copy <code>should.js</code> into your project's <code>Resources</code> folder.</li>
 </ol><p>For full documentation on what should.js can do for your tests, check out the <a href="https://github.com/visionmedia/should.js">documentation</a>.</p>
 
 <h2>
@@ -225,6 +214,8 @@
 <h2>
 <a name="caveats" class="anchor" href="#caveats"><span class="octicon octicon-link"></span></a>Caveats</h2>
 
+<p>These caveats include tips for usage, as well as for development of your own Titanium-compatible reporters.</p>
+
 <h4>
 <a name="titanium-proxies-dont-play-well-with-shouldjs" class="anchor" href="#titanium-proxies-dont-play-well-with-shouldjs"><span class="octicon octicon-link"></span></a>Titanium proxies don't play well with should.js</h4>
 
@@ -235,6 +226,36 @@
 <span class="kd">var</span> <span class="nx">win</span> <span class="o">=</span> <span class="nx">Ti</span><span class="p">.</span><span class="nx">UI</span><span class="p">.</span><span class="nx">createWindow</span><span class="p">();</span>
 <span class="nx">win</span><span class="p">.</span><span class="nx">open</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nb">Function</span><span class="p">;</span>  <span class="c1">// will throw a runtime error</span>
 <span class="nx">should</span><span class="p">(</span><span class="nx">win</span><span class="p">.</span><span class="nx">open</span><span class="p">).</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nb">Function</span><span class="p">;</span> <span class="c1">// will work as expected</span>
+</pre></div>
+
+<h4>
+<a name="tiapi-calls-and-studio-console-dont-like-ansi-codes" class="anchor" href="#tiapi-calls-and-studio-console-dont-like-ansi-codes"><span class="octicon octicon-link"></span></a>Ti.API calls and Studio Console don't like ANSI codes</h4>
+
+<p>Much of the reporters in mocha, including <code>ti-spec</code> which is optimized for the terminal, make use of <a href="http://en.wikipedia.org/wiki/ANSI_escape_code">ANSI codes</a> for the test reporting output. These are integral to coloring, as well as controlling the cursor in mocha's reporters. Unfortunately, <a href="https://jira.appcelerator.org/browse/TISTUD-5979">Titanium Studio's console does not handle ANSI codes</a>, either ignoring them or printing them as literals. On top of this, the Ti.API calls will often mangle commonly used ANSI characters, like <strong>✓</strong> or <strong>✖</strong>. For this reason, when constructing your own reporters, it's wise to use standard characters or test heavily for compatibility before using any ANSI codes. </p>
+
+<h4>
+<a name="tiapi-calls-trim-leading-whitespace" class="anchor" href="#tiapi-calls-trim-leading-whitespace"><span class="octicon octicon-link"></span></a>Ti.API calls trim leading whitespace</h4>
+
+<p>For example, this:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">Ti</span><span class="p">.</span><span class="nx">API</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">'    this should have 4 leading spaces'</span><span class="p">);</span>
+</pre></div>
+
+<p>will print as this (notice the lack of leading spaces):</p>
+
+<div class="highlight highlight-javascript"><pre><span class="k">this</span> <span class="nx">should</span> <span class="nx">have</span> <span class="mi">4</span> <span class="nx">leading</span> <span class="nx">spaces</span>
+</pre></div>
+
+<p>In order to workaround this, we can take advantage of the previously mentioned caveat. If you wrap your whitespace in an ignored ANSI code, the whitespace will be preserved. So the above code would print with the 4 leading spaces if you modified it to look like this:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="c1">// color() helper from Base reporter class</span>
+<span class="kd">var</span> <span class="nx">color</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./base'</span><span class="p">).</span><span class="nx">color</span><span class="p">;</span>
+
+<span class="nx">Ti</span><span class="p">.</span><span class="nx">API</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">color</span><span class="p">(</span><span class="s1">'suite'</span><span class="p">,</span> <span class="s1">'    '</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'this should have 4 leading spaces'</span><span class="p">);</span>
+
+<span class="c1">// or you can simply include the whitespace in the coloring of the whole line</span>
+
+<span class="nx">Ti</span><span class="p">.</span><span class="nx">API</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">color</span><span class="p">(</span><span class="s1">'suite'</span><span class="p">,</span> <span class="s1">'    this should have 4 leading spaces'</span><span class="p">));</span>
 </pre></div>
 
 <h2>
@@ -253,7 +274,7 @@
           This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
         </footer>
 
-
+        
       </div>
     </div>
   </body>
