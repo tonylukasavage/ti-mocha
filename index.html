@@ -37,6 +37,7 @@
 <ul>
 <li><a href="#installation">Installation</a></li>
 <li><a href="#basic-usage">Basic Usage</a></li>
+<li><a href="#reporters">Reporters</a></li>
 <li><a href="#using-shouldjs-with-ti-mocha">Using should.js with ti-mocha</a></li>
 <li><a href="#titanium--mocha--should-example">Titanium + mocha + should example</a></li>
 <li><a href="#tips">Tips</a></li>
@@ -82,6 +83,24 @@
 <span class="c1">// run the tests</span>
 <span class="nx">mocha</span><span class="p">.</span><span class="nx">run</span><span class="p">();</span>
 </pre></div>
+
+<h2>
+<a name="reporters" class="anchor" href="#reporters"><span class="octicon octicon-link"></span></a>Reporters</h2>
+
+<ul>
+<li>
+<strong>ti-spec</strong> - Titanium-compatible version of the original mocha <a href="http://visionmedia.github.io/mocha/#reporters">spec</a> reporter</li>
+<li>
+<strong>ti-spec-studio</strong> - Same as ti-spec, but this one is optimized for use in Titanium Studio</li>
+</ul><p>The <strong>ti-spec</strong> reporter is chosen by default. To switch to a different reporter, use mocha's <code>setup()</code> function before run your test suites.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">mocha</span><span class="p">.</span><span class="nx">setup</span><span class="p">({</span> <span class="nx">reporter</span><span class="o">:</span> <span class="s1">'ti-spec-studio'</span> <span class="p">});</span>
+</pre></div>
+
+<h4>
+<a name="note-for-reporter-developers" class="anchor" href="#note-for-reporter-developers"><span class="octicon octicon-link"></span></a>Note for reporter developers</h4>
+
+<p>Giving your reporter the suffix <strong>"-studio"</strong> will automatically modify ti-mocha's underlying <code>console.log()</code> implementation to exclude ANSI code sequences (covered in <a href="#caveats">Caveats</a>). This helps to automatically optimize your test output for the Titanium Studio console. </p>
 
 <h2>
 <a name="using-shouldjs-with-ti-mocha" class="anchor" href="#using-shouldjs-with-ti-mocha"><span class="octicon octicon-link"></span></a>Using should.js with ti-mocha</h2>
