@@ -1,12 +1,3 @@
-/**
- * NOTES
- *
- * - In these notes, I include "log()" when I refer to "Ti.API calls".
- * - "◦" and "✓" character are handled inconsistently by Ti.API calls, used plain characters instead.
- * - Leading whitespace is trimmed in Ti.API calls. A workaround is to wrap the whitespace with a color or use an ANSI code.
- *
- */
-
 // Create a titanium compatible reporter based on spec
 require.register("reporters/ti-spec.js", function(module, exports, require){
 
