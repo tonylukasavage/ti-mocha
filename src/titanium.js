@@ -10,6 +10,12 @@ mocha.run = function(fn) {
 	});
 };
 
+mocha.reporter = function(r) {
+	Mocha.prototype.reporter.call(this, r);
+	this._ti_reporter = r;
+	return this;
+};
+
 // Override the console functions with node.js-style formatting. This allows us to use some of mocha's existing
 // reporters with only a few modifications, like I do with spec.
 var console = {};
@@ -22,14 +28,17 @@ function createConsoleLogger(type) {
 			args = Array.prototype.slice.call(arguments, 0);
 
 		if (args.length === 0) {
-			args.push(util.cursor.resetLine);
+			args.push(util.cursor.reset + ' ' + util.cursor.reset);
 		} else {
-			// Clear the existing line of text using ANSI codes, get rid of those pesky [INFO] prefixes
-			args[0] = util.cursor.resetLine + (args[0] || '').toString().split(/(?:\r\n|\n|\r)/).join('\n' + util.cursor.resetLine);
+			var prefix = util.cursor.resetLine;
+			if (!/\-studio$/.test(mocha._ti_reporter)) {
+				// Clear the existing line of text using ANSI codes, get rid of those pesky [INFO] prefixes
+				args[0] = prefix + (args[0] || '').toString().split(/(?:\r\n|\n|\r)/).join('\n' + prefix);
+			}
 		}
 
 		// Use the util.js format() port to get node.js-like console functions
-    Ti.API.log(type === 'log' ? 'info' : type, util.format.apply(this, args));
+		Ti.API.log(type === 'log' ? 'info' : type, util.format.apply(this, args));
   };
 }
 

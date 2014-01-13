@@ -5767,14 +5767,90 @@ mocha.run = function(fn){
  */
 
 Mocha.process = process;
-/**
- * NOTES
- *
- * - In these notes, I include "log()" when I refer to "Ti.API calls".
- * - "◦" and "✓" character are handled inconsistently by Ti.API calls, used plain characters instead.
- * - Leading whitespace is trimmed in Ti.API calls. A workaround is to wrap the whitespace with a color or use an ANSI code.
- *
- */
+// Create a titanium compatible reporter based on spec
+require.register("reporters/ti-spec-studio.js", function(module, exports, require){
+
+	/**
+	 * Module dependencies.
+	 */
+
+	var Base = require('./base'),
+		cursor = require('titanium/util').cursor;
+
+	/**
+	 * Expose `Spec`.
+	 */
+
+	exports = module.exports = TiSpecStudio;
+
+	/**
+	 * Initialize a new `TiSpecStudio` test reporter.
+	 *
+	 * @param {Runner} runner
+	 * @api public
+	 */
+
+	function TiSpecStudio(runner) {
+		Base.call(this, runner);
+
+		var self = this,
+			stats = this.stats,
+			indents = 0,
+			n = 0;
+
+		function NL() {
+			Ti.API.info(cursor.reset + ' ' + cursor.reset);
+		}
+
+		function indent() {
+			return cursor.reset + new Array(indents).join('  ') + cursor.reset;
+		}
+
+		runner.on('start', function(){
+			NL();
+		});
+
+		runner.on('suite', function(suite){
+			++indents;
+			Ti.API.info(indent() + suite.title);
+		});
+
+		runner.on('suite end', function(suite){
+			--indents;
+			if (1 === indents) { NL(); }
+		});
+
+		runner.on('pending', function(test){
+			Ti.API.warn(indent() + '  - ' + test.title + ' (pending)');
+		});
+
+		runner.on('pass', function(test){
+			if ('fast' === test.speed) {
+				Ti.API.info(indent() + '  + ' + test.title);
+			} else {
+				Ti.API.info(indent() + '  + ' + test.title + ' (' + test.duration + 'ms)');
+			}
+		});
+
+		runner.on('fail', function(test, err){
+			Ti.API.error(indent() + '  ' + (++n) + ') ' + test.title);
+		});
+
+		runner.on('end', function() {
+			self.epilogue();
+		});
+	}
+
+	/**
+	 * Inherit from `Base.prototype`.
+	 */
+
+	function F(){}
+	F.prototype = Base.prototype;
+	TiSpecStudio.prototype = new F();
+	TiSpecStudio.prototype.constructor = TiSpecStudio;
+
+}); // module: reporters/ti-spec-studio.js
 
 // Create a titanium compatible reporter based on spec
 require.register("reporters/ti-spec.js", function(module, exports, require){
@@ -6264,6 +6340,12 @@ mocha.run = function(fn) {
 	});
 };
 
+mocha.reporter = function(r) {
+	Mocha.prototype.reporter.call(this, r);
+	this._ti_reporter = r;
+	return this;
+};
+
 // Override the console functions with node.js-style formatting. This allows us to use some of mocha's existing
 // reporters with only a few modifications, like I do with spec.
 var console = {};
@@ -6276,14 +6358,17 @@ function createConsoleLogger(type) {
 			args = Array.prototype.slice.call(arguments, 0);
 
 		if (args.length === 0) {
-			args.push(util.cursor.resetLine);
+			args.push(util.cursor.reset + ' ' + util.cursor.reset);
 		} else {
-			// Clear the existing line of text using ANSI codes, get rid of those pesky [INFO] prefixes
-			args[0] = util.cursor.resetLine + (args[0] || '').toString().split(/(?:\r\n|\n|\r)/).join('\n' + util.cursor.resetLine);
+			var prefix = util.cursor.resetLine;
+			if (!/\-studio$/.test(mocha._ti_reporter)) {
+				// Clear the existing line of text using ANSI codes, get rid of those pesky [INFO] prefixes
+				args[0] = prefix + (args[0] || '').toString().split(/(?:\r\n|\n|\r)/).join('\n' + prefix);
+			}
 		}
 
 		// Use the util.js format() port to get node.js-like console functions
-    Ti.API.log(type === 'log' ? 'info' : type, util.format.apply(this, args));
+		Ti.API.log(type === 'log' ? 'info' : type, util.format.apply(this, args));
   };
 }
 
