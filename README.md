@@ -6,7 +6,7 @@ Simple and reliable support for [mocha](https://github.com/visionmedia/mocha) te
 
 1. Install [node.js]().
 2. Install [grunt](): `sudo npm install -g grunt-cli`
-3. `cd ti-mocha && npm install`
+3. `git clone https://github.com/tonylukasavage/ti-mocha.git && cd ti-mocha && npm install`
 
 #### Build
 
