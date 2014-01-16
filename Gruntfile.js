@@ -82,6 +82,6 @@ module.exports = function(grunt) {
   grunt.registerTask('build', ['jshint', 'mochaTest', '_build', 'clean']);
 
   // Register tasks
-  grunt.registerTask('default', ['jshint', 'test']);
+  grunt.registerTask('default', ['build']);
 
 };
