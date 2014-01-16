@@ -1,6 +1,6 @@
 {
   "name": "ti-mocha",
-  "version": "1.6.1",
+  "version": "0.0.1",
   "description": "Simple and reliable support for mocha testing with Appcelerator's Titanium SDK",
   "scripts": {
     "test": "grunt test"
