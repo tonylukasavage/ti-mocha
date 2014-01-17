@@ -19,6 +19,7 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+
 // (The MIT License)
 
 // Copyright (c) 2011-2013 TJ Holowaychuk <tj@vision-media.ca>
@@ -41,7 +42,6 @@
 // CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 ;(function(){
 
 // CommonJS require()
@@ -648,7 +648,6 @@ require.register("browser/path.js", function(module, exports, require){
 }); // module: browser/path.js
 
 require.register("browser/progress.js", function(module, exports, require){
-
 /**
  * Expose `Progress`.
  */
@@ -737,40 +736,41 @@ Progress.prototype.update = function(n){
  */
 
 Progress.prototype.draw = function(ctx){
-  var percent = Math.min(this.percent, 100)
-    , size = this._size
-    , half = size / 2
-    , x = half
-    , y = half
-    , rad = half - 1
-    , fontSize = this._fontSize;
-
-  ctx.font = fontSize + 'px ' + this._font;
-
-  var angle = Math.PI * 2 * (percent / 100);
-  ctx.clearRect(0, 0, size, size);
-
-  // outer circle
-  ctx.strokeStyle = '#9f9f9f';
-  ctx.beginPath();
-  ctx.arc(x, y, rad, 0, angle, false);
-  ctx.stroke();
-
-  // inner circle
-  ctx.strokeStyle = '#eee';
-  ctx.beginPath();
-  ctx.arc(x, y, rad - 1, 0, angle, true);
-  ctx.stroke();
-
-  // text
-  var text = this._text || (percent | 0) + '%'
-    , w = ctx.measureText(text).width;
-
-  ctx.fillText(
-      text
-    , x - w / 2 + 1
-    , y + fontSize / 2 - 1);
-
+  try {
+    var percent = Math.min(this.percent, 100)
+      , size = this._size
+      , half = size / 2
+      , x = half
+      , y = half
+      , rad = half - 1
+      , fontSize = this._fontSize;
+  
+    ctx.font = fontSize + 'px ' + this._font;
+  
+    var angle = Math.PI * 2 * (percent / 100);
+    ctx.clearRect(0, 0, size, size);
+  
+    // outer circle
+    ctx.strokeStyle = '#9f9f9f';
+    ctx.beginPath();
+    ctx.arc(x, y, rad, 0, angle, false);
+    ctx.stroke();
+  
+    // inner circle
+    ctx.strokeStyle = '#eee';
+    ctx.beginPath();
+    ctx.arc(x, y, rad - 1, 0, angle, true);
+    ctx.stroke();
+  
+    // text
+    var text = this._text || (percent | 0) + '%'
+      , w = ctx.measureText(text).width;
+  
+    ctx.fillText(
+        text
+      , x - w / 2 + 1
+      , y + fontSize / 2 - 1);
+  } catch (ex) {} //don't fail if we can't render progress
   return this;
 };
 
@@ -1481,6 +1481,21 @@ function Mocha(options) {
   if (null != options.timeout) this.timeout(options.timeout);
   this.useColors(options.useColors)
   if (options.slow) this.slow(options.slow);
+
+  this.suite.on('pre-require', function (context) {
+    exports.afterEach = context.afterEach || context.teardown;
+    exports.after = context.after || context.suiteTeardown;
+    exports.beforeEach = context.beforeEach || context.setup;
+    exports.before = context.before || context.suiteSetup;
+    exports.describe = context.describe || context.suite;
+    exports.it = context.it || context.test;
+    exports.setup = context.setup || context.beforeEach;
+    exports.suiteSetup = context.suiteSetup || context.before;
+    exports.suiteTeardown = context.suiteTeardown || context.after;
+    exports.suite = context.suite || context.describe;
+    exports.teardown = context.teardown || context.afterEach;
+    exports.test = context.test || context.it;
+  });
 }
 
 /**
@@ -1884,7 +1899,8 @@ require.register("reporters/base.js", function(module, exports, require){
 
 var tty = require('browser/tty')
   , diff = require('browser/diff')
-  , ms = require('../ms');
+  , ms = require('../ms')
+  , utils = require('../utils');
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -2020,7 +2036,7 @@ exports.cursor = {
       exports.cursor.deleteLine();
       exports.cursor.beginningOfLine();
     } else {
-      process.stdout.write('\n');
+      process.stdout.write('\r');
     }
   }
 };
@@ -2058,8 +2074,8 @@ exports.list = function(failures){
     // explicitly show diff
     if (err.showDiff && sameType(actual, expected)) {
       escape = false;
-      err.actual = actual = stringify(actual);
-      err.expected = expected = stringify(expected);
+      err.actual = actual = stringify(canonicalize(actual));
+      err.expected = expected = stringify(canonicalize(expected));
     }
 
     // actual / expected diff
@@ -2324,7 +2340,7 @@ function colorLines(name, str) {
 /**
  * Stringify `obj`.
  *
- * @param {Mixed} obj
+ * @param {Object} obj
  * @return {String}
  * @api private
  */
@@ -2333,6 +2349,40 @@ function stringify(obj) {
   if (obj instanceof RegExp) return obj.toString();
   return JSON.stringify(obj, null, 2);
 }
+
+/**
+ * Return a new object that has the keys in sorted order.
+ * @param {Object} obj
+ * @return {Object}
+ * @api private
+ */
+
+ function canonicalize(obj, stack) {
+   stack = stack || [];
+
+   if (utils.indexOf(stack, obj) !== -1) return obj;
+
+   var canonicalizedObj;
+
+   if ('[object Array]' == {}.toString.call(obj)) {
+     stack.push(obj);
+     canonicalizedObj = utils.map(obj, function(item) {
+       return canonicalize(item, stack);
+     });
+     stack.pop();
+   } else if (typeof obj === 'object' && obj !== null) {
+     stack.push(obj);
+     canonicalizedObj = {};
+     utils.forEach(utils.keys(obj).sort(), function(key) {
+       canonicalizedObj[key] = canonicalize(obj[key], stack);
+     });
+     stack.pop();
+   } else {
+     canonicalizedObj = obj;
+   }
+
+   return canonicalizedObj;
+ }
 
 /**
  * Check that a / b have the same type.
@@ -2348,7 +2398,6 @@ function sameType(a, b) {
   b = Object.prototype.toString.call(b);
   return a == b;
 }
-
 
 
 }); // module: reporters/base.js
@@ -4028,7 +4077,7 @@ function XUnit(runner) {
   });
 
   runner.on('end', function(){
-    process.stdout.write(tag('testsuite', {
+    console.log(tag('testsuite', {
         name: 'Mocha Tests'
       , tests: stats.tests
       , failures: stats.failures
@@ -4039,7 +4088,7 @@ function XUnit(runner) {
     }, false));
 
     tests.forEach(test);
-    process.stdout.write('</testsuite>');
+    console.log('</testsuite>');
   });
 }
 
@@ -4067,11 +4116,11 @@ function test(test) {
   if ('failed' == test.state) {
     var err = test.err;
     attrs.message = escape(err.message);
-    process.stdout.write(tag('testcase', attrs, false, tag('failure', attrs, false, cdata(err.stack))));
+    console.log(tag('testcase', attrs, false, tag('failure', attrs, false, cdata(err.stack))));
   } else if (test.pending) {
-    process.stdout.write(tag('testcase', attrs, false, tag('skipped', {}, true)));
+    console.log(tag('testcase', attrs, false, tag('skipped', {}, true)));
   } else {
-    process.stdout.write(tag('testcase', attrs, true) );
+    console.log(tag('testcase', attrs, true) );
   }
 }
 
@@ -5377,6 +5426,22 @@ exports.forEach = function(arr, fn, scope){
 };
 
 /**
+ * Array#map (<=IE8)
+ *
+ * @param {Array} array
+ * @param {Function} fn
+ * @param {Object} scope
+ * @api private
+ */
+
+exports.map = function(arr, fn, scope){
+  var result = [];
+  for (var i = 0, l = arr.length; i < l; i++)
+    result.push(fn.call(scope, arr[i], i));
+  return result;
+};
+
+/**
  * Array#indexOf (<=IE8)
  *
  * @parma {Array} arr
@@ -5651,7 +5716,7 @@ var uncaughtExceptionHandlers = [];
 process.removeListener = function(e, fn){
   if ('uncaughtException' == e) {
     global.onerror = function() {};
-    var i = uncaughtExceptionHandlers.indexOf(fn);
+    var i = Mocha.utils.indexOf(uncaughtExceptionHandlers, fn);
     if (i != -1) { uncaughtExceptionHandlers.splice(i, 1); }
   }
 };
@@ -5714,8 +5779,8 @@ Mocha.Runner.immediately = function(callback) {
  * only receive the 'message' attribute of the Error.
  */
 mocha.throwError = function(err) {
-  uncaughtExceptionHandlers.forEach(function (fn) {
-    fn(err) ;
+  Mocha.utils.forEach(uncaughtExceptionHandlers, function (fn) {
+    fn(err);
   });
   throw err;
 };
