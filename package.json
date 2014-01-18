@@ -1,6 +1,6 @@
 {
   "name": "ti-mocha",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Simple and reliable support for mocha testing with Appcelerator's Titanium SDK",
   "keywords": ["mocha", "testing", "test", "titanium", "appcelerator", "alloy", "unit test"],
   "homepage": "http://tonylukasavage.com/ti-mocha/",
