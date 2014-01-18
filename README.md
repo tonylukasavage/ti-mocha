@@ -4,23 +4,23 @@ Simple and reliable support for [mocha](https://github.com/visionmedia/mocha) te
 
 ## Contributing
 
-1. Install [node.js]().
-2. Install [grunt](): `sudo npm install -g grunt-cli`
+1. Install [node.js](http://nodejs.org/).
+2. Install [grunt](http://gruntjs.com/): `sudo npm install -g grunt-cli`
 3. `git clone https://github.com/tonylukasavage/ti-mocha.git && cd ti-mocha && npm install`
 
-#### Build
+#### Basic Build
 
 ```
 grunt build
 ```
 
-This process will generate a new `ti-mocha.js` file based on the files in `src`. See [lib/build.js](lib/build.js) for details of the simple build process. Please note that _no_ modifications are made directly in the [src/mocha.js](src/mocha.js) file in order to make the port as simple to maintain as possible.
+This process will generate a new `./ti-mocha.js` file based on the files in `src`, as well as the source mocha.js file found at `./node_modules/mocha/mocha.js` after you execute `npm install`. See [lib/build.js](lib/build.js) for details of the build process. Please note that _no_ modifications are made directly to the source mocha.js file.
 
-#### Testing
+#### Build for Different Version of Mocha
 
-```
-grunt test
-```
+1. Change version of mocha in the package.json `devDependencies`
+2. `npm install`
+3. `grunt build`
 
 ## Issues
 
