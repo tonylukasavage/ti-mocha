@@ -1,6 +1,16 @@
-# ti-mocha [![Build Status](https://travis-ci.org/tonylukasavage/ti-mocha.png?branch=master)](https://travis-ci.org/tonylukasavage/ti-mocha) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+# ti-mocha [![NPM version](https://badge.fury.io/js/ti-mocha.png)](http://badge.fury.io/js/ti-mocha) [![Build Status](https://travis-ci.org/tonylukasavage/ti-mocha.png?branch=master)](https://travis-ci.org/tonylukasavage/ti-mocha) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
-Simple and reliable support for [mocha](https://github.com/visionmedia/mocha) testing with Appcelerator's [Titanium](http://www.appcelerator.com/titanium/) SDK. For full details on installation and usage, read the [documentation](http://tonylukasavage.com/ti-mocha/).
+Simple and reliable support for [mocha](https://github.com/visionmedia/mocha) testing with Appcelerator's [Titanium](http://www.appcelerator.com/titanium/) SDK.
+
+## Full Documentation and Samples
+
+[http://tonylukasavage.com/ti-mocha/](http://tonylukasavage.com/ti-mocha/)
+
+## Quick Start
+
+```
+cd /path/to/Titanium/project && npm install ti-mocha
+```
 
 ## Contributing
 
