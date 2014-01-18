@@ -1,6 +1,7 @@
 var build = require('./lib/build'),
   C = require('./lib/constants'),
   fs = require('fs'),
+  install = require('./lib/install'),
   path = require('path');
 
 module.exports = function(grunt) {
@@ -73,6 +74,16 @@ module.exports = function(grunt) {
     fs.writeFileSync(C.RELEASE_FILE, contents);
     fs.chmodSync(C.RELEASE_FILE, fs.lstatSync(C.BUILD_FILE).mode);
     grunt.log.ok();
+  });
+
+  // install in a Titanium project, if present
+  grunt.registerTask('install', function(dir) {
+    var location = install(dir);
+    if (location) {
+      grunt.log.ok('ti-mocha.js installed to ' + location);
+    } else {
+      grunt.log.debug(dir + ' is not a Titanium project, skipping...');
+    }
   });
 
   // run tests

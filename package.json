@@ -16,7 +16,8 @@
   },
   "main": "./ti-mocha.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "install": "node ./lib/install.js"
   },
   "repository": {
     "type": "git",
