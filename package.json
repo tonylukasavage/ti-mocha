@@ -2,7 +2,15 @@
   "name": "ti-mocha",
   "version": "0.1.0",
   "description": "Simple and reliable support for mocha testing with Appcelerator's Titanium SDK",
-  "keywords": ["mocha", "testing", "test", "titanium", "appcelerator", "alloy", "unit test"],
+  "keywords": [
+    "mocha",
+    "testing",
+    "test",
+    "titanium",
+    "appcelerator",
+    "alloy",
+    "unit test"
+  ],
   "homepage": "http://tonylukasavage.com/ti-mocha/",
   "bugs": {
     "url": "https://github.com/tonylukasavage/ti-mocha/issues",
@@ -31,7 +39,8 @@
     "should": "~2.1.1",
     "wrench": "~1.5.4",
     "grunt-contrib-clean": "~0.5.0",
-    "acorn": "~0.4.2"
+    "acorn": "~0.4.2",
+    "grunt-titanium": "~0.1.0"
   },
   "engines": {
     "node": ">=0.8"

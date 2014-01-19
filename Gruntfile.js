@@ -54,8 +54,23 @@ module.exports = function(grunt) {
       },
       src: ['lib/*.js']
     },
+    titanium: {
+      create: {
+        options: {
+          command: 'create',
+          name: 'tmp',
+          workspaceDir: '.'
+        }
+      },
+      build: {
+        options: {
+          command: 'build',
+          projectDir: path.resolve('tmp')
+        }
+      }
+    },
     clean: {
-      src: ['build']
+      src: ['build', 'tmp']
     }
   });
 
@@ -63,6 +78,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-titanium');
 
   // run build
   grunt.registerTask('_build', 'finalize ti-mocha.js release file', function() {
@@ -86,11 +102,20 @@ module.exports = function(grunt) {
     }
   });
 
+  // run a test app with ti-mocha
+  grunt.registerTask('setup-run', function() {
+    grunt.file.copy(C.RELEASE_FILE, path.resolve('tmp', 'Resources', 'ti-mocha.js'));
+    grunt.file.copy(path.resolve('test', 'app.js'), path.resolve('tmp', 'Resources', 'app.js'));
+  });
+
   // run tests
   grunt.registerTask('test', ['mochaTest', 'clean']);
 
   // release
   grunt.registerTask('build', ['jshint', 'mochaTest', '_build', 'clean']);
+
+  // release and run
+  grunt.registerTask('run', ['build', 'titanium:create', 'setup-run', 'titanium:build']);
 
   // Register tasks
   grunt.registerTask('default', ['build']);
