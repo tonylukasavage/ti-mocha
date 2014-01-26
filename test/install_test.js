@@ -23,6 +23,16 @@ describe('install.js', function() {
 			fs.existsSync(path.join(resourcesDir, 'ti-mocha.js')).should.be.true;
 		});
 
+		it('adds ti-mocha.js to app/lib folder (no lib folder)', function() {
+			var libDir = path.join(tmpDir, 'app');
+			wrench.mkdirSyncRecursive(libDir, 0755);
+			var location = install(tmpDir);
+			should.exist(location);
+			location.should.equal(path.join(libDir, 'lib'));
+			fs.existsSync(path.join(libDir, 'lib', 'ti-mocha.js')).should.be.true;
+			wrench.rmdirSyncRecursive(libDir, true);
+		});
+
 		it('adds ti-mocha.js to app/lib folder', function() {
 			var libDir = path.join(tmpDir, 'app', 'lib');
 			wrench.mkdirSyncRecursive(libDir, 0755);
