@@ -1,4 +1,4 @@
-# ti-mocha [![NPM version](https://badge.fury.io/js/ti-mocha.png)](http://badge.fury.io/js/ti-mocha) [![Build Status](https://travis-ci.org/tonylukasavage/ti-mocha.png?branch=master)](https://travis-ci.org/tonylukasavage/ti-mocha) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+# ti-mocha [![Gittip](http://img.shields.io/gittip/Tony%20Lukasavage.png)](https://www.gittip.com/Tony%20Lukasavage/) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
 Simple and reliable support for [mocha](https://github.com/visionmedia/mocha) testing with Appcelerator's [Titanium](http://www.appcelerator.com/titanium/) SDK.
 
@@ -6,13 +6,13 @@ Simple and reliable support for [mocha](https://github.com/visionmedia/mocha) te
 
 [http://tonylukasavage.com/ti-mocha/](http://tonylukasavage.com/ti-mocha/)
 
-## Quick Start
+## Quick Start [![NPM version](https://badge.fury.io/js/ti-mocha.png)](http://badge.fury.io/js/ti-mocha)
 
 ```
 cd /path/to/Titanium/project && npm install ti-mocha
 ```
 
-## Contributing
+## Contributing [![Build Status](https://travis-ci.org/tonylukasavage/ti-mocha.png?branch=master)](https://travis-ci.org/tonylukasavage/ti-mocha)
 
 1. Install [node.js](http://nodejs.org/).
 2. Install [grunt](http://gruntjs.com/): `[sudo] npm install -g grunt-cli`
