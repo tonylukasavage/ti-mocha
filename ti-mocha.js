@@ -2082,7 +2082,7 @@ exports.list = function(failures){
     if ('string' == typeof actual && 'string' == typeof expected) {
       fmt = color('error title', '  %s) %s:\n%s') + color('error stack', '\n%s\n');
       var match = message.match(/^([^:]+): expected/);
-      msg = match ? '\n      ' + color('error message', match[1]) : '';
+      msg = '\n      ' + color('error message', match ? match[1] : msg);
 
       if (exports.inlineDiffs) {
         msg += inlineDiff(err, escape);
@@ -4448,7 +4448,7 @@ function Runner(suite) {
   this.on('test end', function(test){ self.checkGlobals(test); });
   this.on('hook end', function(hook){ self.checkGlobals(hook); });
   this.grep(/.*/);
-  this.globals(this.globalProps().concat(['errno']));
+  this.globals(this.globalProps().concat(extraGlobals()));
 }
 
 /**
@@ -4561,10 +4561,6 @@ Runner.prototype.checkGlobals = function(test){
   if (test) {
     ok = ok.concat(test._allowedGlobals || []);
   }
-
-  // check length - 2 ('errno' and 'location' globals)
-  if (isNode && 1 == ok.length - globals.length) return;
-  else if (2 == ok.length - globals.length) return;
 
   if(this.prevGlobalsLength == globals.length) return;
   this.prevGlobalsLength = globals.length;
@@ -5032,6 +5028,31 @@ function filterLeaks(ok, globals) {
     return matched.length == 0 && (!global.navigator || 'onerror' !== key);
   });
 }
+
+/**
+ * Array of globals dependent on the environment.
+ *
+ * @return {Array}
+ * @api private
+ */
+
+ function extraGlobals() {
+  if (typeof(process) === 'object' &&
+      typeof(process.version) === 'string') {
+
+    var nodeVersion = process.version.split('.').reduce(function(a, v) {
+      return a << 8 | v;
+    });
+
+    // 'errno' was renamed to process._errno in v0.9.11.
+
+    if (nodeVersion < 0x00090B) {
+      return ['errno'];
+    }
+  }
+
+  return [];
+ }
 
 }); // module: runner.js
 
@@ -6399,7 +6420,7 @@ global.location = {};
 // reset the suites each time mocha is run
 var _mochaRun = mocha.run;
 mocha.run = function(fn) {
-	_mochaRun.call(this, function() {
+	return _mochaRun.call(this, function() {
 		mocha.suite.suites.length = 0;
 		if (fn) { fn(); }
 	});
@@ -6411,6 +6432,10 @@ mocha.reporter = function(r) {
 	return this;
 };
 
+mocha.outputFile = function(outputFile) {
+	this._ti_output_file = outputFile;
+};
+
 // Override the console functions with node.js-style formatting. This allows us to use some of mocha's existing
 // reporters with only a few modifications, like I do with spec.
 var console = {};
@@ -6418,7 +6443,7 @@ var types = ['info','log','error','warn','trace'];
 
 // Use node.js-style util.format() for each console function call
 function createConsoleLogger(type) {
-	console[type] = function() {
+	console[type] = function(message) {
 		var util = require('titanium/util'),
 			args = Array.prototype.slice.call(arguments, 0),
 			isStudio = /\-studio$/.test(mocha._ti_reporter);
@@ -6440,7 +6465,12 @@ function createConsoleLogger(type) {
 
 		// Use the util.js format() port to get node.js-like console functions
 		Ti.API.log(type === 'log' ? 'info' : type, util.format.apply(this, args));
-  };
+
+		// If the output file exists, write the content to the file as well
+		if (mocha._ti_output_file) {
+			mocha._ti_output_file.append(message);
+		}
+	};
 }
 
 for (var i = 0; i < types.length; i++) {
