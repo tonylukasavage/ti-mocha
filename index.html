@@ -38,6 +38,8 @@
 <li><a href="#installation">Installation</a></li>
 <li><a href="#basic-usage">Basic Usage</a></li>
 <li><a href="#reporters">Reporters</a></li>
+<li><a href="#mochasetup">mocha.setup()</a></li>
+<li><a href="#mocharun">mocha.run()</a></li>
 <li><a href="#using-shouldjs-with-ti-mocha">Using should.js with ti-mocha</a></li>
 <li><a href="#titanium--mocha--should-example">Titanium + mocha + should example</a></li>
 <li><a href="#tips">Tips</a></li>
@@ -49,7 +51,7 @@
 <h4>
 <a name="easy-way" class="anchor" href="#easy-way"><span class="octicon octicon-link"></span></a>Easy Way</h4>
 
-<pre><code>cd /path/to/Titanium/project &amp;&amp; npm install ti-mocha
+<pre><code>cd /path/to/Titanium/project &amp;&amp; npm install ti-mocha --prefix ./node_modules
 </code></pre>
 
 <p>If executed in your project's root folder, this will put ti-mocha.js in <code>Resources</code> for traditional Titanium apps, or <code>app/lib</code> for Alloy apps.</p>
@@ -100,12 +102,39 @@
 
 <ul>
 <li>
-<strong>ti-spec</strong> - Titanium-compatible version of the original mocha <a href="http://visionmedia.github.io/mocha/#reporters">spec</a> reporter</li>
+<strong>ti-spec</strong> - Titanium-compatible version of the original mocha spec reporter</li>
 <li>
 <strong>ti-spec-studio</strong> - Same as ti-spec, but this one is optimized for use in Titanium Studio</li>
-</ul><p>The <strong>ti-spec</strong> reporter is chosen by default. To switch to a different reporter, use mocha's <code>setup()</code> function before run your test suites.</p>
+<li>
+<strong>ti-json</strong> - Titanium-compatible version of the original mocha json reporter</li>
+</ul><p>The <strong>ti-spec</strong> reporter is chosen by default. To switch to a different reporter, use mocha's <code>setup()</code> function before run your test suites. Original mocha reporters upon which these reporters are based can be found <a href="http://visionmedia.github.io/mocha/#reporters">here</a>.</p>
 
-<div class="highlight highlight-javascript"><pre><span class="nx">mocha</span><span class="p">.</span><span class="nx">setup</span><span class="p">({</span> <span class="nx">reporter</span><span class="o">:</span> <span class="s1">'ti-spec-studio'</span> <span class="p">});</span>
+<h2>
+<a name="mochasetup" class="anchor" href="#mochasetup"><span class="octicon octicon-link"></span></a><code>mocha.setup()</code>
+</h2>
+
+<p>There's few new properties you can add via <code>mocha.setup()</code> to configure your test runs. </p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">outputFile</span> <span class="o">=</span> <span class="nx">Ti</span><span class="p">.</span><span class="nx">Filesystem</span><span class="p">.</span><span class="nx">getFile</span><span class="p">(</span><span class="nx">Ti</span><span class="p">.</span><span class="nx">Filesystem</span><span class="p">.</span><span class="nx">tempDirectory</span><span class="p">,</span> <span class="s1">'results.json'</span><span class="p">);</span>
+<span class="nx">outputFile</span><span class="p">.</span><span class="nx">create</span><span class="p">();</span>
+
+<span class="nx">mocha</span><span class="p">.</span><span class="nx">setup</span><span class="p">({</span> 
+    <span class="nx">reporter</span><span class="o">:</span> <span class="s1">'ti-json'</span><span class="p">,</span>    <span class="c1">// the reporter to use with your tests</span>
+    <span class="nx">outputFile</span><span class="o">:</span> <span class="nx">outputFile</span><span class="p">,</span> <span class="c1">// write results to the given Ti.Filesystem.File file</span>
+    <span class="nx">quiet</span><span class="o">:</span> <span class="kc">true</span>             <span class="c1">// if true, suppress all console logging</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>
+<a name="mocharun" class="anchor" href="#mocharun"><span class="octicon octicon-link"></span></a><code>mocha.run()</code>
+</h2>
+
+<p>This will kick off your tests. Additionally, you can give it a callback argument to be executed once the tests complete.</p>
+
+<div class="highlight highlight-js"><pre><span class="kd">var</span> <span class="nx">runner</span> <span class="o">=</span> <span class="nx">mocha</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// print the stats from the runner after the test completes</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">runner</span><span class="p">.</span><span class="nx">stats</span><span class="p">));</span>
+<span class="p">});</span>
 </pre></div>
 
 <h4>
