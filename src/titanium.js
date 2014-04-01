@@ -27,9 +27,10 @@ var types = ['info','log','error','warn','trace'];
 
 // Use node.js-style util.format() for each console function call
 function createConsoleLogger(type) {
-	console[type] = function(message) {
+	console[type] = function() {
 		var util = require('titanium/util'),
 			args = Array.prototype.slice.call(arguments, 0),
+			rawArgs = args.slice(0),
 			isStudio = /\-studio$/.test(mocha._ti_reporter);
 
 		if (args.length === 0) {
@@ -38,7 +39,6 @@ function createConsoleLogger(type) {
 			} else {
 				args.push(util.cursor.resetLine);
 			}
-
 		} else {
 			var prefix = util.cursor.resetLine;
 			if (!isStudio) {
@@ -52,7 +52,7 @@ function createConsoleLogger(type) {
 
 		// If the output file exists, write the content to the file as well
 		if (mocha._ti_output_file) {
-			mocha._ti_output_file.append(message);
+			mocha._ti_output_file.append(util.format.apply(this, rawArgs).replace(/\x1B\[[0-9;]*[a-zA-Z]/g, ''));
 		}
 	};
 }

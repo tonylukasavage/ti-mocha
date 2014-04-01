@@ -40,8 +40,7 @@ describe('ti-mocha', function() {
 });
 
 var runner = mocha.run(function() {
-	verify(runner.results.stats, 'results');
-	console.log(outputFile.read().text);
+	verify(runner.results.stats, 'runner.results');
 	verify(JSON.parse(outputFile.read().text).stats, 'outputFile');
 });
 
