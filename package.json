@@ -1,6 +1,6 @@
 {
   "name": "ti-mocha",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Simple and reliable support for mocha testing with Appcelerator's Titanium SDK",
   "keywords": [
     "mocha",
