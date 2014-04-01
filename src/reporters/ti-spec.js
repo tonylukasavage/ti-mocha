@@ -10,7 +10,7 @@ require.register("reporters/ti-spec.js", function(module, exports, require){
 		color = Base.color;
 
 	/**
-	 * Expose `Spec`.
+	 * Expose `TiSpec`.
 	 */
 
 	exports = module.exports = TiSpec;

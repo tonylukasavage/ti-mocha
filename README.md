@@ -9,7 +9,7 @@ Simple and reliable support for [mocha](https://github.com/visionmedia/mocha) te
 ## Quick Start [![NPM version](https://badge.fury.io/js/ti-mocha.png)](http://badge.fury.io/js/ti-mocha)
 
 ```
-cd /path/to/Titanium/project && npm install ti-mocha
+cd /path/to/Titanium/project && npm install ti-mocha --prefix ./node_modules
 ```
 
 ## Contributing [![Build Status](https://travis-ci.org/tonylukasavage/ti-mocha.png?branch=master)](https://travis-ci.org/tonylukasavage/ti-mocha) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)

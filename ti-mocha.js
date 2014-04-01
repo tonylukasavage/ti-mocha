@@ -5853,6 +5853,79 @@ mocha.run = function(fn){
  */
 
 Mocha.process = process;
+require.register("reporters/ti-json.js", function(module, exports, require){
+
+/**
+ * Module dependencies.
+ */
+
+var Base = require('./base'),
+  cursor = require('titanium/util').cursor,
+  color = Base.color;
+
+/**
+ * Expose `JSON`.
+ */
+
+exports = module.exports = TiJSONReporter;
+
+/**
+ * Initialize a new `TiJSON` reporter.
+ *
+ * @param {Runner} runner
+ * @api public
+ */
+
+function TiJSONReporter(runner) {
+  var self = this;
+  Base.call(this, runner);
+
+  var tests = [],
+    failures = [],
+    passes = [];
+
+  runner.on('test end', function(test){
+    tests.push(test);
+  });
+
+  runner.on('pass', function(test){
+    passes.push(test);
+  });
+
+  runner.on('fail', function(test){
+    failures.push(test);
+  });
+
+  runner.on('end', function(){
+    var obj = {
+      stats: self.stats,
+      tests: tests.map(clean),
+      failures: failures.map(clean),
+      passes: passes.map(clean)
+    };
+
+    console.log(cursor.resetLine + JSON.stringify(obj, null, 2));
+    runner.results = obj;
+  });
+}
+
+/**
+ * Return a plain-object representation of `test`
+ * free of cyclic properties etc.
+ *
+ * @param {Object} test
+ * @return {Object}
+ * @api private
+ */
+
+function clean(test) {
+  return {
+    title: test.title,
+    fullTitle: test.fullTitle(),
+    duration: test.duration
+  };
+}
+}); // module: reporters/ti-json.js
 // Create a titanium compatible reporter based on spec
 require.register("reporters/ti-spec-studio.js", function(module, exports, require){
 
@@ -5864,7 +5937,7 @@ require.register("reporters/ti-spec-studio.js", function(module, exports, requir
 		cursor = require('titanium/util').cursor;
 
 	/**
-	 * Expose `Spec`.
+	 * Expose `TiSpecStudio`.
 	 */
 
 	exports = module.exports = TiSpecStudio;
@@ -5950,7 +6023,7 @@ require.register("reporters/ti-spec.js", function(module, exports, require){
 		color = Base.color;
 
 	/**
-	 * Expose `Spec`.
+	 * Expose `TiSpec`.
 	 */
 
 	exports = module.exports = TiSpec;
