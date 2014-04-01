@@ -2082,7 +2082,7 @@ exports.list = function(failures){
     if ('string' == typeof actual && 'string' == typeof expected) {
       fmt = color('error title', '  %s) %s:\n%s') + color('error stack', '\n%s\n');
       var match = message.match(/^([^:]+): expected/);
-      msg = match ? '\n      ' + color('error message', match[1]) : '';
+      msg = '\n      ' + color('error message', match ? match[1] : msg);
 
       if (exports.inlineDiffs) {
         msg += inlineDiff(err, escape);
@@ -4448,7 +4448,7 @@ function Runner(suite) {
   this.on('test end', function(test){ self.checkGlobals(test); });
   this.on('hook end', function(hook){ self.checkGlobals(hook); });
   this.grep(/.*/);
-  this.globals(this.globalProps().concat(['errno']));
+  this.globals(this.globalProps().concat(extraGlobals()));
 }
 
 /**
@@ -4561,10 +4561,6 @@ Runner.prototype.checkGlobals = function(test){
   if (test) {
     ok = ok.concat(test._allowedGlobals || []);
   }
-
-  // check length - 2 ('errno' and 'location' globals)
-  if (isNode && 1 == ok.length - globals.length) return;
-  else if (2 == ok.length - globals.length) return;
 
   if(this.prevGlobalsLength == globals.length) return;
   this.prevGlobalsLength = globals.length;
@@ -5032,6 +5028,31 @@ function filterLeaks(ok, globals) {
     return matched.length == 0 && (!global.navigator || 'onerror' !== key);
   });
 }
+
+/**
+ * Array of globals dependent on the environment.
+ *
+ * @return {Array}
+ * @api private
+ */
+
+ function extraGlobals() {
+  if (typeof(process) === 'object' &&
+      typeof(process.version) === 'string') {
+
+    var nodeVersion = process.version.split('.').reduce(function(a, v) {
+      return a << 8 | v;
+    });
+
+    // 'errno' was renamed to process._errno in v0.9.11.
+
+    if (nodeVersion < 0x00090B) {
+      return ['errno'];
+    }
+  }
+
+  return [];
+ }
 
 }); // module: runner.js
 
@@ -5832,6 +5853,80 @@ mocha.run = function(fn){
  */
 
 Mocha.process = process;
+require.register("reporters/ti-json.js", function(module, exports, require){
+
+/**
+ * Module dependencies.
+ */
+
+var Base = require('./base'),
+  cursor = require('titanium/util').cursor,
+  color = Base.color;
+
+/**
+ * Expose `JSON`.
+ */
+
+exports = module.exports = TiJSONReporter;
+
+/**
+ * Initialize a new `TiJSON` reporter.
+ *
+ * @param {Runner} runner
+ * @api public
+ */
+
+function TiJSONReporter(runner) {
+  var self = this;
+  Base.call(this, runner);
+
+  var tests = [],
+    failures = [],
+    passes = [];
+
+  runner.on('test end', function(test){
+    tests.push(test);
+  });
+
+  runner.on('pass', function(test){
+    passes.push(test);
+  });
+
+  runner.on('fail', function(test){
+    failures.push(test);
+  });
+
+  runner.on('end', function(){
+    var obj = {
+      stats: self.stats,
+      tests: tests.map(clean),
+      failures: failures.map(clean),
+      passes: passes.map(clean)
+    };
+
+    console.log(cursor.resetLine + JSON.stringify(obj, null, 2));
+    runner.results = obj;
+    //process.stdout.write(JSON.stringify(obj, null, 2));
+  });
+}
+
+/**
+ * Return a plain-object representation of `test`
+ * free of cyclic properties etc.
+ *
+ * @param {Object} test
+ * @return {Object}
+ * @api private
+ */
+
+function clean(test) {
+  return {
+    title: test.title,
+    fullTitle: test.fullTitle(),
+    duration: test.duration
+  };
+}
+}); // module: reporters/ti-json.js
 // Create a titanium compatible reporter based on spec
 require.register("reporters/ti-spec-studio.js", function(module, exports, require){
 
@@ -5843,7 +5938,7 @@ require.register("reporters/ti-spec-studio.js", function(module, exports, requir
 		cursor = require('titanium/util').cursor;
 
 	/**
-	 * Expose `Spec`.
+	 * Expose `TiSpecStudio`.
 	 */
 
 	exports = module.exports = TiSpecStudio;
@@ -5929,7 +6024,7 @@ require.register("reporters/ti-spec.js", function(module, exports, require){
 		color = Base.color;
 
 	/**
-	 * Expose `Spec`.
+	 * Expose `TiSpec`.
 	 */
 
 	exports = module.exports = TiSpec;
@@ -6399,9 +6494,9 @@ global.location = {};
 // reset the suites each time mocha is run
 var _mochaRun = mocha.run;
 mocha.run = function(fn) {
-	_mochaRun.call(this, function() {
+	var runner = _mochaRun.call(this, function() {
 		mocha.suite.suites.length = 0;
-		if (fn) { fn(); }
+		if (fn) { fn(runner.results); }
 	});
 };
 

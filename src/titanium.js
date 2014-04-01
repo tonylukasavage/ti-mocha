@@ -4,9 +4,9 @@ global.location = {};
 // reset the suites each time mocha is run
 var _mochaRun = mocha.run;
 mocha.run = function(fn) {
-	_mochaRun.call(this, function() {
+	var runner = _mochaRun.call(this, function() {
 		mocha.suite.suites.length = 0;
-		if (fn) { fn(); }
+		if (fn) { fn(runner.results); }
 	});
 };
 
