@@ -51,7 +51,6 @@ function TiJSONReporter(runner) {
 
     console.log(cursor.resetLine + JSON.stringify(obj, null, 2));
     runner.results = obj;
-    //process.stdout.write(JSON.stringify(obj, null, 2));
   });
 }
 
