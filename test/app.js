@@ -8,7 +8,8 @@ outputFile.createFile();
 
 mocha.setup({
 	reporter: 'ti-json',
-	outputFile: outputFile
+	outputFile: outputFile,
+	quiet: true
 });
 
 describe('ti-mocha', function() {
@@ -40,6 +41,7 @@ describe('ti-mocha', function() {
 });
 
 var runner = mocha.run(function() {
+	console.log('***** TEST RESULTS *****');
 	verify(runner.results.stats, 'runner.results');
 	verify(JSON.parse(outputFile.read().text).stats, 'outputFile');
 });
