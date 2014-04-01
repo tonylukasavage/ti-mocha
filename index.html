@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>ti-mocha by tonylukasavage</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>ti-mocha</h1>
+          <h2>Simple and reliable support for mocha testing with Appcelerator&#39;s Titanium SDK</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/tonylukasavage/ti-mocha/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/tonylukasavage/ti-mocha/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/tonylukasavage/ti-mocha" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h2>
+<a name="table-of-contents" class="anchor" href="#table-of-contents"><span class="octicon octicon-link"></span></a>Table of Contents</h2>
+
+<ul>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#basic-usage">Basic Usage</a></li>
+<li><a href="#reporters">Reporters</a></li>
+<li><a href="#using-shouldjs-with-ti-mocha">Using should.js with ti-mocha</a></li>
+<li><a href="#titanium--mocha--should-example">Titanium + mocha + should example</a></li>
+<li><a href="#tips">Tips</a></li>
+<li><a href="#caveats">Caveats</a></li>
+<li><a href="#links">Links</a></li>
+</ul><h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<h4>
+<a name="easy-way" class="anchor" href="#easy-way"><span class="octicon octicon-link"></span></a>Easy Way</h4>
+
+<pre><code>cd /path/to/Titanium/project &amp;&amp; npm install ti-mocha
+</code></pre>
+
+<p>If executed in your project's root folder, this will put ti-mocha.js in <code>Resources</code> for traditional Titanium apps, or <code>app/lib</code> for Alloy apps.</p>
+
+<h4>
+<a name="less-easy-way" class="anchor" href="#less-easy-way"><span class="octicon octicon-link"></span></a>Less Easy Way</h4>
+
+<ol>
+<li>Download <a href="https://raw.github.com/tonylukasavage/ti-mocha/master/ti-mocha.js">ti-mocha.js</a>.</li>
+<li>Copy <code>ti-mocha.js</code> into your project's <code>Resources</code> folder (or <code>app/lib</code> if you're using alloy).</li>
+</ol><h2>
+<a name="basic-usage" class="anchor" href="#basic-usage"><span class="octicon octicon-link"></span></a>Basic Usage</h2>
+
+<div class="highlight highlight-javascript"><pre><span class="c1">// creates the "mocha" global necessary to run a test suite anywhere in your app</span>
+<span class="nx">require</span><span class="p">(</span><span class="s1">'ti-mocha'</span><span class="p">);</span>
+
+<span class="c1">// create the test suite</span>
+<span class="nx">describe</span><span class="p">(</span><span class="s1">'ti-mocha'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="nx">describe</span><span class="p">(</span><span class="s1">'suite 1'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+        <span class="nx">it</span><span class="p">(</span><span class="s1">'shows passing tests (fast)'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){});</span>
+
+        <span class="nx">it</span><span class="p">(</span><span class="s1">'shows passing tests (slow)'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">done</span><span class="p">){</span>
+            <span class="nx">setTimeout</span><span class="p">(</span><span class="nx">done</span><span class="p">,</span> <span class="mi">1500</span><span class="p">);</span>
+        <span class="p">});</span>
+
+    <span class="p">});</span>
+
+    <span class="nx">describe</span><span class="p">(</span><span class="s1">'suite 2'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+        <span class="nx">it</span><span class="p">(</span><span class="s1">'shows pending tests'</span><span class="p">);</span>
+
+        <span class="nx">it</span><span class="p">(</span><span class="s1">'fails a test'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">'this shoud fail'</span><span class="p">);</span>
+        <span class="p">});</span>
+
+    <span class="p">});</span>
+
+<span class="p">});</span>
+
+<span class="c1">// run the tests</span>
+<span class="nx">mocha</span><span class="p">.</span><span class="nx">run</span><span class="p">();</span>
+</pre></div>
+
+<h2>
+<a name="reporters" class="anchor" href="#reporters"><span class="octicon octicon-link"></span></a>Reporters</h2>
+
+<ul>
+<li>
+<strong>ti-spec</strong> - Titanium-compatible version of the original mocha <a href="http://visionmedia.github.io/mocha/#reporters">spec</a> reporter</li>
+<li>
+<strong>ti-spec-studio</strong> - Same as ti-spec, but this one is optimized for use in Titanium Studio</li>
+</ul><p>The <strong>ti-spec</strong> reporter is chosen by default. To switch to a different reporter, use mocha's <code>setup()</code> function before run your test suites.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">mocha</span><span class="p">.</span><span class="nx">setup</span><span class="p">({</span> <span class="nx">reporter</span><span class="o">:</span> <span class="s1">'ti-spec-studio'</span> <span class="p">});</span>
+</pre></div>
+
+<h4>
+<a name="note-for-reporter-developers" class="anchor" href="#note-for-reporter-developers"><span class="octicon octicon-link"></span></a>Note for reporter developers</h4>
+
+<p>Giving your reporter the suffix <strong>"-studio"</strong> will automatically modify ti-mocha's underlying <code>console.log()</code> implementation to exclude ANSI code sequences (covered in <a href="#caveats">Caveats</a>). This helps to automatically optimize your test output for the Titanium Studio console. </p>
+
+<h2>
+<a name="using-shouldjs-with-ti-mocha" class="anchor" href="#using-shouldjs-with-ti-mocha"><span class="octicon octicon-link"></span></a>Using should.js with ti-mocha</h2>
+
+<p>While mocha doesn't care what you use as your assertion library, it works particularly well with <a href="https://github.com/visionmedia/should.js">should.js</a>, not coincidentally due to them having the same <a href="https://github.com/visionmedia">author</a>. To install should.js:</p>
+
+<ol>
+<li>Download <a href="https://raw.github.com/visionmedia/should.js/master/should.js">should.js</a>.</li>
+<li>Copy <code>should.js</code> into your project's <code>Resources</code> folder.</li>
+</ol><p>For full documentation on what should.js can do for your tests, check out the <a href="https://github.com/visionmedia/should.js">documentation</a>.</p>
+
+<h2>
+<a name="titanium--mocha--should-example" class="anchor" href="#titanium--mocha--should-example"><span class="octicon octicon-link"></span></a>Titanium + mocha + should example</h2>
+
+<h4>
+<a name="appjs" class="anchor" href="#appjs"><span class="octicon octicon-link"></span></a>app.js</h4>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">require</span><span class="p">(</span><span class="s1">'ti-mocha'</span><span class="p">);</span>
+
+<span class="c1">// create a basic UI</span>
+<span class="kd">var</span> <span class="nx">win</span> <span class="o">=</span> <span class="nx">Ti</span><span class="p">.</span><span class="nx">UI</span><span class="p">.</span><span class="nx">createWindow</span><span class="p">({</span>
+    <span class="nx">backgroundColor</span><span class="o">:</span> <span class="s1">'#fff'</span><span class="p">,</span>
+    <span class="nx">fullscreen</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nx">exitOnClose</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">id</span><span class="o">:</span> <span class="s1">'myWindow'</span>
+<span class="p">});</span>
+<span class="kd">var</span> <span class="nx">view</span> <span class="o">=</span> <span class="nx">Ti</span><span class="p">.</span><span class="nx">UI</span><span class="p">.</span><span class="nx">createView</span><span class="p">({</span>
+    <span class="nx">height</span><span class="o">:</span> <span class="nx">Ti</span><span class="p">.</span><span class="nx">UI</span><span class="p">.</span><span class="nx">FILL</span><span class="p">,</span>
+    <span class="nx">width</span><span class="o">:</span> <span class="nx">Ti</span><span class="p">.</span><span class="nx">UI</span><span class="p">.</span><span class="nx">FILL</span><span class="p">,</span>
+    <span class="nx">backgroundColor</span><span class="o">:</span> <span class="s1">'#a00'</span><span class="p">,</span>
+    <span class="nx">id</span><span class="o">:</span> <span class="s1">'myView'</span>
+<span class="p">});</span>
+<span class="nx">win</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">view</span><span class="p">);</span>
+
+<span class="c1">// run tests after window opens to ensure UI is initialized</span>
+<span class="nx">win</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'open'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">require</span><span class="p">(</span><span class="s1">'test/app_test'</span><span class="p">)(</span><span class="nx">win</span><span class="p">,</span> <span class="nx">view</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// show the UI</span>
+<span class="nx">win</span><span class="p">.</span><span class="nx">open</span><span class="p">();</span>
+</pre></div>
+
+<h4>
+<a name="testapp_testjs" class="anchor" href="#testapp_testjs"><span class="octicon octicon-link"></span></a>test/app_test.js</h4>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">should</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'should'</span><span class="p">);</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">win</span><span class="p">,</span> <span class="nx">view</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="nx">describe</span><span class="p">(</span><span class="s1">'app.js'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+        <span class="nx">describe</span><span class="p">(</span><span class="s1">'#myWindow'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+            <span class="nx">it</span><span class="p">(</span><span class="s1">'exists'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">should</span><span class="p">.</span><span class="nx">exist</span><span class="p">(</span><span class="nx">win</span><span class="p">);</span>
+                <span class="nx">win</span><span class="p">.</span><span class="nx">id</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">'myWindow'</span><span class="p">);</span>
+            <span class="p">});</span>
+
+            <span class="nx">it</span><span class="p">(</span><span class="s1">'has Ti.UI.Window functions'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">should</span><span class="p">(</span><span class="nx">win</span><span class="p">.</span><span class="nx">open</span><span class="p">).</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nb">Function</span><span class="p">;</span>
+                <span class="nx">should</span><span class="p">(</span><span class="nx">win</span><span class="p">.</span><span class="nx">close</span><span class="p">).</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nb">Function</span><span class="p">;</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="nx">Ti</span><span class="p">.</span><span class="nx">Platform</span><span class="p">.</span><span class="nx">name</span> <span class="o">===</span> <span class="s1">'iPhone OS'</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">should</span><span class="p">(</span><span class="nx">win</span><span class="p">.</span><span class="nx">hideTabBar</span><span class="p">).</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nb">Function</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">});</span>
+
+            <span class="nx">it</span><span class="p">(</span><span class="s1">'has dimensions equal to the device'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">win</span><span class="p">.</span><span class="nx">size</span><span class="p">.</span><span class="nx">height</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">Ti</span><span class="p">.</span><span class="nx">Platform</span><span class="p">.</span><span class="nx">displayCaps</span><span class="p">.</span><span class="nx">platformHeight</span><span class="p">);</span>
+                <span class="nx">win</span><span class="p">.</span><span class="nx">size</span><span class="p">.</span><span class="nx">width</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">Ti</span><span class="p">.</span><span class="nx">Platform</span><span class="p">.</span><span class="nx">displayCaps</span><span class="p">.</span><span class="nx">platformWidth</span><span class="p">);</span>
+            <span class="p">});</span>
+
+        <span class="p">});</span>
+
+        <span class="nx">describe</span><span class="p">(</span><span class="s1">'#myView'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+            <span class="nx">it</span><span class="p">(</span><span class="s1">'exists'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+                <span class="nx">should</span><span class="p">.</span><span class="nx">exist</span><span class="p">(</span><span class="nx">view</span><span class="p">);</span>
+                <span class="nx">view</span><span class="p">.</span><span class="nx">id</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">'myView'</span><span class="p">);</span>
+            <span class="p">});</span>
+
+            <span class="nx">it</span><span class="p">(</span><span class="s1">'has Ti.UI.View functions'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">should</span><span class="p">(</span><span class="nx">view</span><span class="p">.</span><span class="nx">add</span><span class="p">).</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nb">Function</span><span class="p">;</span>
+            <span class="p">});</span>
+
+            <span class="nx">it</span><span class="p">(</span><span class="s1">'is a child of window'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">win</span><span class="p">.</span><span class="nx">children</span><span class="p">.</span><span class="nx">length</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+                <span class="nx">should</span><span class="p">.</span><span class="nx">exist</span><span class="p">(</span><span class="nx">win</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+                <span class="nx">win</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">id</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">'myView'</span><span class="p">);</span>
+            <span class="p">});</span>
+
+            <span class="nx">it</span><span class="p">(</span><span class="s1">'view has same dimensions as window'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+                <span class="nx">view</span><span class="p">.</span><span class="nx">size</span><span class="p">.</span><span class="nx">height</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">win</span><span class="p">.</span><span class="nx">size</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span>
+                <span class="nx">view</span><span class="p">.</span><span class="nx">size</span><span class="p">.</span><span class="nx">width</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">win</span><span class="p">.</span><span class="nx">size</span><span class="p">.</span><span class="nx">width</span><span class="p">);</span>
+            <span class="p">});</span>
+
+        <span class="p">});</span>
+
+    <span class="p">});</span>
+
+    <span class="c1">// run the tests</span>
+    <span class="nx">mocha</span><span class="p">.</span><span class="nx">run</span><span class="p">();</span>
+<span class="p">};</span>
+</pre></div>
+
+<h4>
+<a name="output" class="anchor" href="#output"><span class="octicon octicon-link"></span></a>output</h4>
+
+<p><img src="http://f.cl.ly/items/0c04320C3M1j2w2N1O1X/Screen%20Shot%202014-01-01%20at%2012.05.05%20PM.png" alt="example output"></p>
+
+<h2>
+<a name="tips" class="anchor" href="#tips"><span class="octicon octicon-link"></span></a>Tips</h2>
+
+<ul>
+<li>Set your log level to <code>info</code> to get the best looking test results.</li>
+<li>
+<a href="https://gist.github.com/tonylukasavage/8208574">.jshintrc</a> for Titanium + mocha + should</li>
+<li>If you're going to test Titanium UI state (like size and position), be sure to wait until the UI is ready. The easiest way to do this in most cases is to wait for the containing Ti.UI.Window to be open.</li>
+</ul><div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">win</span> <span class="o">=</span> <span class="nx">Ti</span><span class="p">.</span><span class="nx">UI</span><span class="p">.</span><span class="nx">createWindow</span><span class="p">();</span>
+
+<span class="c1">// assemble the rest of "win" UI</span>
+
+<span class="nx">win</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'open'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// run tests against "win" or its children</span>
+<span class="p">});</span>
+<span class="nx">win</span><span class="p">.</span><span class="nx">open</span><span class="p">();</span>
+</pre></div>
+
+<h2>
+<a name="caveats" class="anchor" href="#caveats"><span class="octicon octicon-link"></span></a>Caveats</h2>
+
+<p>These caveats include tips for usage, as well as for development of your own Titanium-compatible reporters.</p>
+
+<h4>
+<a name="titanium-proxies-dont-play-well-with-shouldjs" class="anchor" href="#titanium-proxies-dont-play-well-with-shouldjs"><span class="octicon octicon-link"></span></a>Titanium proxies don't play well with should.js</h4>
+
+<p>should.js works by extending <code>Object.prototype</code> with the <code>should</code> object. While this works for all pure Javascript objects and most Titanium proxy properties, it does not update the proxies themselves, or their functions. When attempting to use <code>should</code> directly on Titanium proxies or their functions, you must wrap the proxy or function in a <code>should</code> call to avoid a runtime <code>undefined</code> error.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">should</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'should'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">win</span> <span class="o">=</span> <span class="nx">Ti</span><span class="p">.</span><span class="nx">UI</span><span class="p">.</span><span class="nx">createWindow</span><span class="p">();</span>
+<span class="nx">win</span><span class="p">.</span><span class="nx">open</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nb">Function</span><span class="p">;</span>  <span class="c1">// will throw a runtime error</span>
+<span class="nx">should</span><span class="p">(</span><span class="nx">win</span><span class="p">.</span><span class="nx">open</span><span class="p">).</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nb">Function</span><span class="p">;</span> <span class="c1">// will work as expected</span>
+</pre></div>
+
+<h4>
+<a name="tiapi-calls-and-studio-console-dont-like-ansi-codes" class="anchor" href="#tiapi-calls-and-studio-console-dont-like-ansi-codes"><span class="octicon octicon-link"></span></a>Ti.API calls and Studio Console don't like ANSI codes</h4>
+
+<p>Much of the reporters in mocha, including <code>ti-spec</code> which is optimized for the terminal, make use of <a href="http://en.wikipedia.org/wiki/ANSI_escape_code">ANSI codes</a> for the test reporting output. These are integral to coloring, as well as controlling the cursor in mocha's reporters. Unfortunately, <a href="https://jira.appcelerator.org/browse/TISTUD-5979">Titanium Studio's console does not handle ANSI codes</a>, either ignoring them or printing them as literals. On top of this, the Ti.API calls will often mangle commonly used ANSI characters, like <strong>✓</strong> or <strong>✖</strong>. For this reason, when constructing your own reporters, it's wise to use standard characters or test heavily for compatibility before using any ANSI codes. </p>
+
+<h4>
+<a name="tiapi-calls-trim-leading-whitespace" class="anchor" href="#tiapi-calls-trim-leading-whitespace"><span class="octicon octicon-link"></span></a>Ti.API calls trim leading whitespace</h4>
+
+<p>For example, this:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">Ti</span><span class="p">.</span><span class="nx">API</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">'    this should have 4 leading spaces'</span><span class="p">);</span>
+</pre></div>
+
+<p>will print as this (notice the lack of leading spaces):</p>
+
+<div class="highlight highlight-javascript"><pre><span class="k">this</span> <span class="nx">should</span> <span class="nx">have</span> <span class="mi">4</span> <span class="nx">leading</span> <span class="nx">spaces</span>
+</pre></div>
+
+<p>In order to workaround this, we can take advantage of the previously mentioned caveat. If you wrap your whitespace in an ignored ANSI code, the whitespace will be preserved. So the above code would print with the 4 leading spaces if you modified it to look like this:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="c1">// color() helper from Base reporter class</span>
+<span class="kd">var</span> <span class="nx">color</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./base'</span><span class="p">).</span><span class="nx">color</span><span class="p">;</span>
+
+<span class="nx">Ti</span><span class="p">.</span><span class="nx">API</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">color</span><span class="p">(</span><span class="s1">'suite'</span><span class="p">,</span> <span class="s1">'    '</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'this should have 4 leading spaces'</span><span class="p">);</span>
+
+<span class="c1">// or you can simply include the whitespace in the coloring of the whole line</span>
+
+<span class="nx">Ti</span><span class="p">.</span><span class="nx">API</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">color</span><span class="p">(</span><span class="s1">'suite'</span><span class="p">,</span> <span class="s1">'    this should have 4 leading spaces'</span><span class="p">));</span>
+</pre></div>
+
+<h2>
+<a name="links" class="anchor" href="#links"><span class="octicon octicon-link"></span></a>Links</h2>
+
+<ul>
+<li><a href="http://visionmedia.github.io/mocha/">mocha website and docs</a></li>
+<li><a href="https://github.com/visionmedia/should.js">should.js website and docs</a></li>
+<li><a href="https://twitter.com/tonylukasavage">@tonylukasavage</a></li>
+<li><a href="http://www.appcelerator.com/">Appcelerator website</a></li>
+</ul>
+        </section>
+
+        <footer>
+          ti-mocha is maintained by <a href="https://github.com/tonylukasavage">tonylukasavage</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
