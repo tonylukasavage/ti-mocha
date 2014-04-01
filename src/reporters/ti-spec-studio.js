@@ -9,7 +9,7 @@ require.register("reporters/ti-spec-studio.js", function(module, exports, requir
 		cursor = require('titanium/util').cursor;
 
 	/**
-	 * Expose `Spec`.
+	 * Expose `TiSpecStudio`.
 	 */
 
 	exports = module.exports = TiSpecStudio;
