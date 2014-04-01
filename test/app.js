@@ -1,6 +1,15 @@
 require('ti-mocha');
 
-mocha.setup({ reporter: 'ti-json' });
+var outputFile = Ti.Filesystem.getFile(Ti.Filesystem.tempDirectory, 'results.json');
+if (outputFile.exists()) {
+	outputFile.deleteFile();
+}
+outputFile.createFile();
+
+mocha.setup({
+	reporter: 'ti-json',
+	outputFile: outputFile
+});
 
 describe('ti-mocha', function() {
 
@@ -30,12 +39,17 @@ describe('ti-mocha', function() {
 
 });
 
-mocha.run(function(results) {
-	if (results.stats.passes === 5 && results.stats.failures === 1 && results.stats.pending === 2) {
-		Ti.API.info('ti-mocha tests ran successfully.');
-	} else {
-		Ti.API.error('ti-mocha tests failed.');
-		Ti.API.error('expected: ' + JSON.stringify({passes:5,pending:2,failures:1}));
-		Ti.API.error('actual:   ' + JSON.stringify(results.stats));
-	}
+var runner = mocha.run(function() {
+	verify(runner.results.stats, 'runner.results');
+	verify(JSON.parse(outputFile.read().text).stats, 'outputFile');
 });
+
+function verify(o, prefix) {
+	if (o.passes === 5 && o.failures === 1 && o.pending === 2) {
+		Ti.API.info('[' + prefix + '] ti-mocha tests ran successfully.');
+	} else {
+		Ti.API.error('[' + prefix + '] ti-mocha tests failed.');
+		Ti.API.error('expected: ' + JSON.stringify({passes:5,pending:2,failures:1}));
+		Ti.API.error('actual:   ' + JSON.stringify(o));
+	}
+}
