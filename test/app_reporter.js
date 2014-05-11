@@ -1,7 +1,7 @@
 require('ti-mocha');
 
 mocha.setup({
-	reporter: 'landing'
+	reporter: 'ti-jenkins'
 });
 
 describe('ti-mocha', function() {
