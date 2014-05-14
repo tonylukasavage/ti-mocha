@@ -115,7 +115,7 @@
 <p>There's few new properties you can add via <code>mocha.setup()</code> to configure your test runs. </p>
 
 <div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">outputFile</span> <span class="o">=</span> <span class="nx">Ti</span><span class="p">.</span><span class="nx">Filesystem</span><span class="p">.</span><span class="nx">getFile</span><span class="p">(</span><span class="nx">Ti</span><span class="p">.</span><span class="nx">Filesystem</span><span class="p">.</span><span class="nx">tempDirectory</span><span class="p">,</span> <span class="s1">'results.json'</span><span class="p">);</span>
-<span class="nx">outputFile</span><span class="p">.</span><span class="nx">create</span><span class="p">();</span>
+<span class="nx">outputFile</span><span class="p">.</span><span class="nx">createFile</span><span class="p">();</span>
 
 <span class="nx">mocha</span><span class="p">.</span><span class="nx">setup</span><span class="p">({</span> 
     <span class="nx">reporter</span><span class="o">:</span> <span class="s1">'ti-json'</span><span class="p">,</span>    <span class="c1">// the reporter to use with your tests</span>
