@@ -744,28 +744,28 @@ Progress.prototype.draw = function(ctx){
       , y = half
       , rad = half - 1
       , fontSize = this._fontSize;
-  
+
     ctx.font = fontSize + 'px ' + this._font;
-  
+
     var angle = Math.PI * 2 * (percent / 100);
     ctx.clearRect(0, 0, size, size);
-  
+
     // outer circle
     ctx.strokeStyle = '#9f9f9f';
     ctx.beginPath();
     ctx.arc(x, y, rad, 0, angle, false);
     ctx.stroke();
-  
+
     // inner circle
     ctx.strokeStyle = '#eee';
     ctx.beginPath();
     ctx.arc(x, y, rad - 1, 0, angle, true);
     ctx.stroke();
-  
+
     // text
     var text = this._text || (percent | 0) + '%'
       , w = ctx.measureText(text).width;
-  
+
     ctx.fillText(
         text
       , x - w / 2 + 1
@@ -1536,7 +1536,7 @@ Mocha.prototype.reporter = function(reporter){
   } else {
     reporter = reporter || 'dot';
     var _reporter;
-    try { _reporter = require('./reporters/' + reporter); } catch (err) {};
+    try { _reporter = require('./reporters/' + reporter); } catch (err) { console.log(err); };
     if (!_reporter) try { _reporter = require(reporter); } catch (err) {};
     if (!_reporter && reporter === 'teamcity')
       console.warn('The Teamcity reporter was moved to a package named ' +
