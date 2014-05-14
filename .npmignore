@@ -20,3 +20,4 @@ build
 examples/alloy/ti-mocha-alloy
 examples/traditional/ti-mocha-traditional
 tmp
+test
