@@ -65,6 +65,7 @@ module.exports = function(grunt) {
       build: {
         options: {
           command: 'build',
+          iosVersion: '7.1',
           projectDir: path.resolve('tmp')
         }
       }
