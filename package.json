@@ -24,7 +24,7 @@
   },
   "main": "./ti-mocha.js",
   "scripts": {
-    "test": "grunt mochatest",
+    "test": "grunt test",
     "install": "node ./lib/install.js"
   },
   "repository": {
