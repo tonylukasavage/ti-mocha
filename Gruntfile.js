@@ -20,22 +20,7 @@ module.exports = function(grunt) {
       options: {
         jshintrc: true
       },
-      tests: {
-        options: {
-          expr: true,
-          unused: false,
-          globals: {
-            describe: false,
-            it: false,
-            before: false,
-            beforeEach: false,
-            after: false,
-            afterEach: false
-          }
-        },
-        src: ['test/*_test.js']
-      },
-      src: ['lib/*.js']
+      src: ['lib/*.js', ]
     },
     ti_run: {
       app: {
@@ -67,13 +52,7 @@ module.exports = function(grunt) {
     grunt.log.ok();
   });
 
-  // run tests
-  grunt.registerTask('test', ['mochaTest', 'clean']);
-
-  // release
-  grunt.registerTask('build', ['jshint', 'mochaTest', '_build', 'clean']);
-
-  // release and run
-  grunt.registerTask('default', ['build', 'ti_run']);
+  // lint and test node and titanium
+  grunt.registerTask('default', ['clean', 'jshint', 'mochaTest', '_build', 'clean', 'ti_run']);
 
 };
