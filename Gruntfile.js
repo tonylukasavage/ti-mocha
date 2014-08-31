@@ -20,7 +20,7 @@ module.exports = function(grunt) {
       options: {
         jshintrc: true
       },
-      src: ['lib/*.js', ]
+      src: ['lib/*.js', 'test/*.js' ]
     },
     ti_run: {
       app: {
