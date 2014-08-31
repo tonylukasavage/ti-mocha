@@ -26,6 +26,7 @@
   "loopfunc": true,
   "proto": true,
   "node": true,
+  "-W030": true,
   "-W104": true,
   "-W068": true
 }
