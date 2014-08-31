@@ -55,11 +55,6 @@ module.exports = function(grunt) {
       src: ['lib/*.js']
     },
     ti_run: {
-      options: {
-        build: {
-          iosVersion: '7.1'
-        }
-      },
       app: {
         files: {
           'tmp/app/Resources': ['ti-mocha.js', 'test/app.js']
