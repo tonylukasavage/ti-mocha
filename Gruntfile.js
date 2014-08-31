@@ -54,19 +54,15 @@ module.exports = function(grunt) {
       },
       src: ['lib/*.js']
     },
-    titanium: {
-      create: {
-        options: {
-          command: 'create',
-          name: 'tmp',
-          workspaceDir: '.'
+    ti_run: {
+      options: {
+        build: {
+          iosVersion: '7.1'
         }
       },
-      build: {
-        options: {
-          command: 'build',
-          iosVersion: '7.1',
-          projectDir: path.resolve('tmp')
+      app: {
+        files: {
+          'tmp/app/Resources': ['ti-mocha.js', 'test/app.js']
         }
       }
     },
@@ -103,18 +99,6 @@ module.exports = function(grunt) {
     }
   });
 
-  // run a test app with ti-mocha
-  grunt.registerTask('setup-run', function() {
-    grunt.file.copy(C.RELEASE_FILE, path.resolve('tmp', 'Resources', 'ti-mocha.js'));
-    grunt.file.copy(path.resolve('test', 'app.js'), path.resolve('tmp', 'Resources', 'app.js'));
-  });
-
-  // run a test app with ti-mocha
-  grunt.registerTask('setup-run-reporter', function() {
-    grunt.file.copy(C.RELEASE_FILE, path.resolve('tmp', 'Resources', 'ti-mocha.js'));
-    grunt.file.copy(path.resolve('test', 'app_reporter.js'), path.resolve('tmp', 'Resources', 'app.js'));
-  });
-
   // run tests
   grunt.registerTask('test', ['mochaTest', 'clean']);
 
@@ -122,10 +106,6 @@ module.exports = function(grunt) {
   grunt.registerTask('build', ['jshint', 'mochaTest', '_build', 'clean']);
 
   // release and run
-  grunt.registerTask('run', ['build', 'titanium:create', 'setup-run', 'titanium:build']);
-  grunt.registerTask('run-reporter', ['build', 'titanium:create', 'setup-run-reporter', 'titanium:build']);
-
-  // Register tasks
-  grunt.registerTask('default', ['build']);
+  grunt.registerTask('default', ['build', 'ti_run']);
 
 };
