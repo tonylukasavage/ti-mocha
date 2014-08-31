@@ -52,6 +52,7 @@ module.exports = function(grunt) {
   });
 
   // lint and test node and titanium
+  grunt.registerTask('test', ['clean', 'mochaTest']);
   grunt.registerTask('default', ['clean', 'jshint', 'mochaTest', '_build', 'clean', 'ti_run']);
 
 };
