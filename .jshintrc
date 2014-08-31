@@ -9,7 +9,6 @@
 		"beforeEach": false,
 		"after": false,
 		"afterEach": false,
-		"should": false,
 		"mocha": false
 	},
 	"camelcase": true,

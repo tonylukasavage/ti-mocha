@@ -9,7 +9,6 @@ module.exports = function(grunt) {
   grunt.initConfig({
     mochaTest: {
       options: {
-        require: ['should'],
         timeout: 3000,
         ignoreLeaks: false,
         reporter: 'spec'
