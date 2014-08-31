@@ -18,23 +18,7 @@ module.exports = function(grunt) {
     },
     jshint: {
       options: {
-        camelcase: true,
-        curly: true,
-        eqeqeq: true,
-        immed: true,
-        indent: 4,
-        latedef: 'nofunc',
-        newcap: true,
-        noarg: true,
-        nonew: true,
-        undef: true,
-        unused: true,
-        trailing: true,
-        loopfunc: true,
-        proto: true,
-        node: true,
-        '-W104': true, // 'const' is only available in JavaScript 1.7
-        '-W068': true  // Wrapping non-IIFE function literals in parens is unnecessary
+        jshintrc: true
       },
       tests: {
         options: {
