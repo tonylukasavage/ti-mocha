@@ -1,8 +1,7 @@
 var acorn = require('acorn'),
 	build = require('../lib/build'),
 	C = require('../lib/constants'),
-	fs = require('fs'),
-	path = require('path');
+	fs = require('fs');
 
 describe('build.js', function() {
 
