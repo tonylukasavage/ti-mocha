@@ -6,7 +6,7 @@ var _mochaRun = mocha.run;
 mocha.run = function(fn) {
 	return _mochaRun.call(this, function() {
 		mocha.suite.suites.length = 0;
-		if (fn) { fn(); }
+		if (fn) { fn.apply(this, arguments); }
 	});
 };
 
