@@ -36,9 +36,9 @@
     "grunt": "~0.4.2",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-jshint": "~0.7.2",
-    "mocha": "~1.17.0",
     "grunt-mocha-test": "~0.8.1",
     "grunt-titanium": "^0.2.0",
+    "mocha": "1.21.5",
     "should": "~2.1.1",
     "wrench": "~1.5.4"
   },
