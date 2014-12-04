@@ -21,7 +21,7 @@ cd /path/to/Titanium/project && npm install ti-mocha --prefix ./node_modules
 #### Basic Build
 
 ```
-grunt build
+grunt
 ```
 
 This process will generate a new `./ti-mocha.js` file based on the files in `src`, as well as the source mocha.js file found at `./node_modules/mocha/mocha.js` after you execute `npm install`. See [lib/build.js](lib/build.js) for details of the build process. Please note that _no_ modifications are made directly to the source mocha.js file.
@@ -30,7 +30,7 @@ This process will generate a new `./ti-mocha.js` file based on the files in `src
 
 1. Change version of mocha in the package.json `devDependencies`
 2. `npm install`
-3. `grunt build`
+3. `grunt`
 
 ## Issues
 
