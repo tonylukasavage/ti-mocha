@@ -467,13 +467,29 @@ function Jenkins(runner) {
     Base.call(this, runner);
 
     var self = this;
-    var fd, currentSuite;
+    var fd, reportContent = '', currentSuite;
 
-    function writeString(str) {
+    function writeReport() {
+        var testsuitesTag = '<testsuites';
+        testsuitesTag += ' name="Mocha Tests"';
+        testsuitesTag += ' tests="'+self.stats.tests+'"';
+        testsuitesTag += ' failures="'+self.stats.failures+'"';
+        testsuitesTag += ' time="'+(self.stats.duration/1000)+'"';
+        testsuitesTag += '>\n';
+        prependString(testsuitesTag);
+        writeString('</testsuites>\n');
         if (fd) {
-            var buf = Ti.createBuffer({value:str});
+            var buf = Ti.createBuffer({value:reportContent});
             fd.write(buf);
         }
+    }
+
+    function prependString(str) {
+        reportContent = str + reportContent;
+    }
+
+    function writeString(str) {
+        reportContent += str;
     }
 
     function genSuiteReport() {
@@ -488,7 +504,7 @@ function Jenkins(runner) {
 
         currentSuite.tests.forEach(function(test) {
             writeString('<testcase');
-            writeString(' classname="'+htmlEscape(currentSuite.suite.fullTitle())+'"');
+            writeString(' classname="'+Titanium.Platform.osname+'.'+htmlEscape(currentSuite.suite.fullTitle())+'"');
             writeString(' name="'+htmlEscape(test.title)+'"');
             writeString(' time="'+(test.duration/1000)+'"');
             if (test.state == "failed") {
@@ -525,7 +541,7 @@ function Jenkins(runner) {
             console.log();
             console.log('  Suite duration: '+(currentSuite.duration/1000)+' s, Tests: '+currentSuite.tests.length);
             try {
-            genSuiteReport();
+              genSuiteReport();
             } catch (err) { console.log(err); }
             currentSuite = null;
         }
@@ -574,13 +590,11 @@ function Jenkins(runner) {
         var path = 'jenkins.xml';
         var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, path);
         if (path) { fd = file.open(Ti.Filesystem.MODE_WRITE); }
-
-        writeString('<testsuites name="Mocha Tests on ' + Titanium.Platform.osname + '">\n');
     });
 
     runner.on('end', function() {
         endSuite();
-        writeString('</testsuites>\n');
+        writeReport();
         if (fd) { fd.close(); }
         self.epilogue.call(self);
     });
