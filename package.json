@@ -32,13 +32,13 @@
     "url": "git://github.com/tonylukasavage/ti-mocha.git"
   },
   "devDependencies": {
-    "acorn": "~0.4.2",
+    "acorn": "~0.12.0",
     "grunt": "~0.4.2",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-jshint": "~0.7.2",
     "grunt-mocha-test": "~0.8.1",
-    "grunt-titanium": "^0.2.0",
-    "mocha": "1.21.5",
+    "grunt-titanium": "^0.3.1",
+    "mocha": "2.2.1",
     "should": "~2.1.1",
     "wrench": "~1.5.4"
   },
