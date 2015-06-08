@@ -2158,11 +2158,18 @@ exports.list = function(failures){
     var err = test.err
       , message = err.message || ''
       , stack = err.stack || message
-      , index = stack.indexOf(message) + message.length
-      , msg = stack.slice(0, index)
+      , index = stack.indexOf(message)
       , actual = err.actual
       , expected = err.expected
       , escape = true;
+    if (index === -1) {
+        msg = message;
+    } else {
+      index += message.length;
+      msg = stack.slice(0, index);
+      // remove msg from stack
+      stack = stack.slice(index + 1);
+    }
 
     // uncaught
     if (err.uncaught) {
@@ -2190,8 +2197,7 @@ exports.list = function(failures){
     }
 
     // indent stack trace without msg
-    stack = stack.slice(index ? index + 1 : index)
-      .replace(/^/gm, '  ');
+    stack = stack.replace(/^/gm, '  ');
 
     console.error(fmt, (i + 1), test.fullTitle(), msg, stack);
   });
